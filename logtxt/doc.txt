@@ -1,0 +1,35 @@
+https://www.notion.so/IPOT-Mobile-Developer-Technical-Test-35870d20b87980729abaefcc0f4d01ca
+
+ scan QR → browse menu → add items to cart → submit order → track status
+
+ ### 1. QR Code Scanner
+
+- Open camera and scan a QR code containing a table ID (format: `ipot://table/{tableId}`)
+- Handle invalid QR codes gracefully
+- After scanning, navigate to the menu for that table's restaurant
+
+### 2. Menu Browser
+
+- Fetch menu from API: `GET /api/v1/menu?table_id={tableId}`
+- Display menu categories as tabs/sections
+- Show menu items with: name, description, price, image (if available)
+- Support searching/filtering menu items
+
+### 3. Cart & Customizations
+
+- Add items to cart with quantity controls (+/-)
+- Support item customizations (e.g., "No onion", "Extra spicy", "Medium rare")
+    - Each customization may have a price modifier
+- Show cart summary with item count, subtotal, and customization details
+- Allow removing items or adjusting quantities
+
+### 4. Order Submission
+
+### 5. Order Tracking (Bonus)
+
+screens:
+QR Code Scanner
+Menu Browser
+Customizations (modal/screen)
+Cart
+Order Tracking
