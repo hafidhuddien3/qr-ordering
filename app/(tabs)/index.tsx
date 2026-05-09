@@ -1,22 +1,20 @@
-import { Image } from "expo-image";
 import { StyleSheet, View } from "react-native";
 
+import ScanButton from "@/src/components/button/scan-qr-button";
 import { HelloWave } from "@/src/components/hello-wave";
 import ParallaxScrollView from "@/src/components/parallax-scroll-view";
-import ScanButton from "@/src/components/scan-qr-button";
 import { ThemedText } from "@/src/components/themed-text";
 import { ThemedView } from "@/src/components/themed-view";
+import { choosedTheme } from "@/src/constants/theme";
+import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 
 export default function HomeScreen() {
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
+      headerBackgroundColor={{ light: "#A1CEDC", dark: choosedTheme.primary }}
       headerImage={
-        <Image
-          source={require("@/src/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
+<Ionicons name="restaurant" size={300} color={choosedTheme.secondary} />
       }
     >
       <ThemedView style={styles.titleContainer}>
@@ -30,6 +28,7 @@ export default function HomeScreen() {
         <ThemedText type="subtitle">Step 1: Scan QR</ThemedText>
         <View style={{ padding: 5, width: 200 }}>
           <Link href="/qr-scanner"><ScanButton /></Link>
+          <Link href="/menu?tableId=T001">t1</Link>
         </View>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
@@ -64,5 +63,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: "absolute",
+    color: choosedTheme.secondary
   },
 });

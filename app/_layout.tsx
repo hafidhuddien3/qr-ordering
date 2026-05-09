@@ -8,6 +8,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
+import { choosedTheme } from "@/src/constants/theme";
 import { useColorScheme } from "@/src/hooks/use-color-scheme";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,19 @@ export default function RootLayout() {
           <Stack.Screen
             name="qr-scanner"
             options={{ presentation: "modal", title: "QR Scanner" }}
+          />
+          <Stack.Screen
+            name="menu"
+            options={{
+              title: "Menu",
+              headerStyle: {
+                backgroundColor: choosedTheme.primary, 
+              },
+              headerTintColor: "#FFFFFF", 
+              headerTitleStyle: {
+                fontWeight: "bold",
+              },
+            }}
           />
         </Stack>
         <StatusBar style="auto" />
