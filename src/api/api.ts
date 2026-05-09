@@ -5,6 +5,8 @@
 // GET	/api/v1/orders/{id}	Get order status
 // GET	/api/v1/tables/{id}/status	Get table status
 
+import { MenuResponse } from "../models/menuResponse";
+import { ResponseBase } from "../models/responseBase";
 import { request } from "./axiosClient";
 
 type Customizations = { option_id: number; quantity: number };
@@ -23,7 +25,7 @@ type OrderData = {
 
 export const apiService = {
   // GET	/api/v1/menu?table_id={id}	Get menu for a table
-  async getMenuForATable(tableId: string) {
+  async getMenuForATable(tableId: string): Promise<ResponseBase<MenuResponse>> {
     return await request({
       url: "/menu",
       params: {

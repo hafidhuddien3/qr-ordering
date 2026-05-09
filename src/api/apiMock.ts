@@ -5,6 +5,8 @@
 // GET	/api/v1/orders/{id}	Get order status
 // GET	/api/v1/tables/{id}/status	Get table status
 
+import { MenuResponse } from "../models/menuResponse";
+import { ResponseBase } from "../models/responseBase";
 import { dataMock } from "./dataMock";
 
 type Customizations = { option_id: number; quantity: number };
@@ -39,7 +41,7 @@ const responseFailed = (message: string) => {
 
 export const apiService = {
   // GET	/api/v1/menu?table_id={id}	Get menu for a table
-  async getMenuForATable(tableId: string) {
+  async getMenuForATable(tableId: string): Promise<ResponseBase<MenuResponse>> {
     if (tableId !== "T001") return responseFailed("Table ID not found");
     return responseSuccess(dataMock.menuTableIdT001);
   },
