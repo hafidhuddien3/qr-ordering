@@ -1,5 +1,5 @@
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { api } from "../api/apiMiddleware";
@@ -40,9 +40,7 @@ export default function QRScanner() {
                   .then((response: any) => {
                     if (response.success == true) {
                       setScannedSuccess(true);
-                      // store menu data in cache or state management for later use in menu page
-
-                      // go to menu page 
+                      router.replace(`/menu?tableId=${tableId}`);
 
                     } else {
                       alert(response?.message);
