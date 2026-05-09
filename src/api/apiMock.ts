@@ -32,7 +32,7 @@ const responseSuccess = (data: any) => {
 const responseFailed = (message: string) => {
   return {
     success: false,
-    message: "Request successful",
+    message: message,
     errors: {},
   };
 };
@@ -40,7 +40,7 @@ const responseFailed = (message: string) => {
 export const apiService = {
   // GET	/api/v1/menu?table_id={id}	Get menu for a table
   async getMenuForATable(tableId: string) {
-    if (tableId !== "T001") return responseFailed("Table not found");
+    if (tableId !== "T001") return responseFailed("Table ID not found");
     return responseSuccess(dataMock.menuTableIdT001);
   },
 
