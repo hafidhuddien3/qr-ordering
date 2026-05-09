@@ -14,8 +14,8 @@ export default function AddButton({ onPress }: Props) {
         flexDirection: "row",
         alignItems: "center",
         backgroundColor: choosedTheme.primary,
-        padding: 12,
-        borderRadius: 8,
+        padding: 10,
+        borderRadius: 10,
       }}
       onPress={onPress}
     >

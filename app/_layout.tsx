@@ -39,13 +39,27 @@ export default function RootLayout() {
             options={{ presentation: "modal", title: "QR Scanner" }}
           />
           <Stack.Screen
+            name="add-item"
+            options={{
+              presentation: "modal",
+              title: "Add Item",
+              headerStyle: {
+                backgroundColor: choosedTheme.primary,
+              },
+              headerTintColor: "#FFFFFF",
+              headerTitleStyle: {
+                fontWeight: "bold",
+              },
+            }}
+          />
+          <Stack.Screen
             name="menu"
             options={{
               title: "Menu",
               headerStyle: {
-                backgroundColor: choosedTheme.primary, 
+                backgroundColor: choosedTheme.primary,
               },
-              headerTintColor: "#FFFFFF", 
+              headerTintColor: "#FFFFFF",
               headerTitleStyle: {
                 fontWeight: "bold",
               },

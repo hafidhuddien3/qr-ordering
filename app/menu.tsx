@@ -1,9 +1,10 @@
 import { api } from "@/src/api/apiMiddleware";
+import { cacheObject } from "@/src/cache/cache";
 import AddButton from "@/src/components/button/add-menu-button";
 import { choosedTheme } from "@/src/constants/theme";
 import { MenuResponse } from "@/src/models/menuResponse";
 import { useQuery } from "@tanstack/react-query";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, View } from "react-native";
 
@@ -85,10 +86,16 @@ export default function MenuScreen() {
                 >
                   <Text style={{ fontSize: 16 }}>{item.name}</Text>
                   <Text style={{ color: "gray" }}>{item.description}</Text>
-                  <Text>Rp {item.price}</Text>
+                  <Text>USD {item.price}</Text>
                 </View>
                 <AddButton
-                  onPress={() => console.log("Add item with id:", item.id)}
+                  onPress={() =>{
+                    cacheObject.currentMenuItem = item;
+                    router.push({
+                      pathname: "/add-item",
+                    })
+                  }
+                  }
                 />
               </View>
             ))}

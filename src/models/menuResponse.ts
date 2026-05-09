@@ -11,9 +11,9 @@ type MenuCategory = {
   items?: MenuItem[];
 };
 
-type CustomizationOption = { id: number; name: string; price_modifier: number };
+export type CustomizationOption = { id: number; name: string; price_modifier: number };
 
-type Customization = {
+export type Customization = {
   id: number;
   name: string;
   required: boolean;
@@ -21,7 +21,7 @@ type Customization = {
   options: CustomizationOption[];
 };
 
-type MenuItem = {
+export type MenuItem = {
   id: number;
   name: string;
   description: string;
