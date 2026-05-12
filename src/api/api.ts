@@ -6,22 +6,10 @@
 // GET	/api/v1/tables/{id}/status	Get table status
 
 import { MenuResponse } from "../models/menuResponse";
+import { OrderData } from "../models/order";
 import { ResponseBase } from "../models/responseBase";
 import { request } from "./axiosClient";
 
-type Customizations = { option_id: number; quantity: number };
-
-type MenuItem = {
-  menu_item_id: number;
-  quantity: number;
-  customizations: Customizations[];
-};
-
-type OrderData = {
-  table_id: string;
-  item: MenuItem[];
-  customer_note: string;
-};
 
 export const apiService = {
   // GET	/api/v1/menu?table_id={id}	Get menu for a table

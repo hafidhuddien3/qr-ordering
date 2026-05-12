@@ -1,10 +1,10 @@
-type Restaurant = {
+export type Restaurant = {
   id: string;
   name: string;
   table_id: string;
 };
 
-type MenuCategory = {
+export type MenuCategory = {
   id: number;
   name: string;
   sort_order: number;
@@ -13,7 +13,7 @@ type MenuCategory = {
 
 export type CustomizationOption = { id: number; name: string; price_modifier: number };
 
-export type Customization = {
+export type CustomizationGroup = {
   id: number;
   name: string;
   required: boolean;
@@ -28,7 +28,7 @@ export type MenuItem = {
   price: number;
   category_id: number;
   image_url: string | null;
-  customization_groups: Customization[];
+  customization_groups: CustomizationGroup[];
 };
 
 export type MenuResponse = {
