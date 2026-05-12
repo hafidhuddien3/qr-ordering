@@ -33,7 +33,8 @@ export default function RootLayout() {
     >
       <QueryClientProvider client={queryClient}>
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
+          <Stack.Screen name="(tabs)/index" options={{ headerShown: false }} />
           <Stack.Screen
             name="qr-scanner"
             options={{ presentation: "modal", title: "QR Scanner" }}
@@ -56,6 +57,19 @@ export default function RootLayout() {
             name="menu"
             options={{
               title: "Menu",
+              headerStyle: {
+                backgroundColor: choosedTheme.primary,
+              },
+              headerTintColor: "#FFFFFF",
+              headerTitleStyle: {
+                fontWeight: "bold",
+              },
+            }}
+          />
+          <Stack.Screen
+            name="cart"
+            options={{
+              title: "Cart",
               headerStyle: {
                 backgroundColor: choosedTheme.primary,
               },

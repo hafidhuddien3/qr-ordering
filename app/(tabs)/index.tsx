@@ -22,26 +22,13 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <ThemedText>
-        {`Please follow the steps below to place your order using our QR code ordering system. If you have any questions, feel free to ask our staff for assistance. Enjoy your meal!`}
+        {`Please click start scan QR code to see menu. If you have any questions, feel free to ask our staff for assistance. Enjoy your meal!`}
       </ThemedText>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Scan QR</ThemedText>
         <View style={{ padding: 5, width: 200 }}>
           <Link href="/qr-scanner"><ScanButton /></Link>
           <Link href="/menu?tableId=T001">t1</Link>
         </View>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Browse Menu</ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Add Items to Cart</ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 4: Submit Order</ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 5: Track Status</ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
