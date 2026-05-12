@@ -1,5 +1,6 @@
 import { MenuCategory } from "@/src/models/menuResponse";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from "react-native";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -17,7 +18,7 @@ export const useCategoryStore = create<CategoryStore>()(
     {
       name: "categories-storage",
       storage: createJSONStorage(() =>
-        typeof window !== "undefined" ? localStorage : AsyncStorage
+        Platform.OS === "web" ? localStorage : AsyncStorage
       ),
     }
   )
