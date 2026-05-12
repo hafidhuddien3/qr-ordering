@@ -1,11 +1,14 @@
 import { api } from "@/src/api/apiMiddleware";
 import { cacheObject } from "@/src/cache/cache";
 import AddButton from "@/src/components/button/add-menu-button";
+import IonIconButton from "@/src/components/button/ion-icon-button";
 import { choosedTheme } from "@/src/constants/theme";
 import { MenuResponse } from "@/src/models/menuResponse";
+import { useCartStore } from "@/src/state/stores/useCartStore";
+import { useCategoryStore } from "@/src/state/stores/useCategoryStore";
 import { useQuery } from "@tanstack/react-query";
 import { router, Stack, useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ScrollView, Text, TextInput, View } from "react-native";
 
 export default function MenuScreen() {
@@ -21,26 +24,41 @@ export default function MenuScreen() {
     queryFn: () => api.getMenuForATable(tableId.toString()),
   });
 
-  useEffect(() => {
-    if (data) {
-      const categories = data?.data?.categories || [];
-      categories.forEach((category: any) => {
-        category.items = data?.data?.items.filter(
-          (item: any) => item.category_id === category.id
-        );
+  const cart = useCartStore((state) => state.order);
+  const setCategories = useCategoryStore((state) => state.setCategories)
+  const setTableId = useCartStore((state) => state.setTableId)
+
+  const totalPrice = useMemo(() => {
+    return cart.item.reduce((total, item) => {
+      let itemPrice = item.price || 0;
+      item.customizations.forEach((customization) => {
+        itemPrice += customization.price_modifier || 0;
       });
-      setMenuByCategory(categories);
-    }
-  }, [data]);
+      return total + itemPrice * item.quantity;
+    }, 0);
+  }, [cart]);
 
   const filteredMenu = menuByCategory.map((category) => ({
     ...category,
     items: category?.items?.filter((item) =>
-      item.name.toLowerCase().includes(search.toLowerCase())
+      item.name?.toLowerCase().includes(search.toLowerCase())
     ),
   }));
 
-  //for changing
+  useEffect(() => {
+    if (data) {
+      setCategories(data?.data?.categories || []);
+      const categories = data?.data?.categories || [];
+      categories.forEach((category) => {
+        category.items = data?.data?.items.filter(
+          (item) => item.category_id === category.id
+        );
+      });
+      setMenuByCategory(categories);
+      setTableId(data?.data?.restaurant.table_id || "");
+    }
+  }, [data]);
+
 
   return (
     <View style={{ flex: 1, backgroundColor: choosedTheme.background }}>
@@ -62,7 +80,7 @@ export default function MenuScreen() {
       <ScrollView>
         {filteredMenu.map((category) => (
           <View key={category.id}>
-            <Text style={{ fontSize: 18, fontWeight: "bold", margin: 10 }}>
+            <Text style={{ fontSize: 18, fontWeight: "bold", margin: 10, marginBottom: 1 }}>
               {category.name}
             </Text>
 
@@ -82,20 +100,21 @@ export default function MenuScreen() {
                     padding: 10,
                     borderBottomWidth: 1,
                     borderColor: "#eee",
+                    maxWidth: "80%",
+                    gap:3
                   }}
                 >
                   <Text style={{ fontSize: 16 }}>{item.name}</Text>
-                  <Text style={{ color: "gray" }}>{item.description}</Text>
+                  <Text style={{ color: "gray", }}>{item.description}</Text>
                   <Text>USD {item.price}</Text>
                 </View>
                 <AddButton
-                  onPress={() =>{
+                  onPress={() => {
                     cacheObject.currentMenuItem = item;
                     router.push({
                       pathname: "/add-item",
-                    })
-                  }
-                  }
+                    });
+                  }}
                 />
               </View>
             ))}
@@ -105,6 +124,26 @@ export default function MenuScreen() {
           </View>
         ))}
       </ScrollView>
+      <View
+        style={{
+          flexDirection: "row",
+          padding: 10,
+          backgroundColor: choosedTheme.secondary,
+                paddingRight:25
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+      
+          }}
+        >
+          <Text style={{ fontWeight: "bold", color:'white' }}>USD {totalPrice.toFixed(2)}</Text>
+        </View>
+        <IonIconButton iconName={'cart'} onPress={() => router.push("/cart")} text={cart.item.length.toString()}/>
+      </View>
     </View>
   );
 }

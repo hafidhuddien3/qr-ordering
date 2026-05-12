@@ -1,16 +1,54 @@
 import { cacheObject } from "@/src/cache/cache";
 import { Radio } from "@/src/components/radio";
+import { CartCustomizationsOption } from "@/src/models/cart";
 import { CustomizationOption } from "@/src/models/menuResponse";
+import { useCartStore } from "@/src/state/stores/useCartStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { router } from "expo-router";
 import { useMemo, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
 export default function CustomizeScreen() {
-  const item = cacheObject.currentMenuItem
+  const item = cacheObject.currentMenuItem;
   const [quantity, setQuantity] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState<{
-    [groupId: number]: CustomizationOption[];
+    [customizationGroupId: number]: CustomizationOption[];
   }>({});
+
+  const addItem = useCartStore((state) => state.addItem);
+
+  const handleAdd = () => {
+    if (!item) return;
+
+    const customizations: CartCustomizationsOption[] = [];
+
+    Object.values(selectedOptions).forEach((opts: any) => {
+      opts?.forEach((o: any) => {
+        customizations.push({
+          option_id: o.id,
+          quantity: 1,
+          price_modifier: o.price_modifier,
+          name: o.name,
+          group_name:
+            item?.customization_groups.find((g) =>
+              g.options.some((opt) => opt.id === o.id)
+            )?.name || "",
+        });
+      });
+    });
+
+    addItem({
+      menu_item_id: item.id,
+      quantity: quantity,
+      customizations,
+      price: item.price,
+      category_id: item.category_id,
+      name: item.name,
+      total_price: totalPrice,
+    });
+
+    router.back();
+  };
 
   // calculate price
   const totalPrice = useMemo(() => {
@@ -26,26 +64,26 @@ export default function CustomizeScreen() {
   }, [selectedOptions, quantity]);
 
   const toggleOption = (
-    groupId: number,
+    customizationGroupId: number,
     option: CustomizationOption,
     maxSelections: number
   ) => {
     setSelectedOptions((prev) => {
-      const current = prev[groupId] || [];
+      const current = prev[customizationGroupId] || [];
 
       const exists = current.find((o) => o.id === option.id);
 
       if (exists) {
         return {
           ...prev,
-          [groupId]: current.filter((o) => o.id !== option.id),
+          [customizationGroupId]: current.filter((o) => o.id !== option.id),
         };
       }
 
       if (1 == maxSelections) {
         return {
           ...prev,
-          [groupId]: [option],
+          [customizationGroupId]: [option],
         };
       }
 
@@ -53,7 +91,7 @@ export default function CustomizeScreen() {
 
       return {
         ...prev,
-        [groupId]: [...current, option],
+        [customizationGroupId]: [...current, option],
       };
     });
   };
@@ -168,6 +206,7 @@ export default function CustomizeScreen() {
             }
           }
           // add to cart
+          handleAdd();
         }}
       >
         <Text style={{ color: "#fff", fontWeight: "bold" }}>Add to Cart</Text>
