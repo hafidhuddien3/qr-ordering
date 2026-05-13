@@ -1,4 +1,4 @@
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 
 export const utilsConfirm = ({
   title = "Confirm",
@@ -11,7 +11,7 @@ export const utilsConfirm = ({
   isDestructiveStyle?: boolean;
   onConfirm: () => void;
 }) => {
-  confirm(message) ? onConfirm() : null;
+  Platform.OS == 'web' && confirm(message) ? onConfirm() : null;
   Alert.alert(title, message, [
     {
       text: "Cancel",
