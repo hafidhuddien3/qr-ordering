@@ -27,25 +27,194 @@ You can start developing by editing the files inside the **app** directory. This
 
 ## Get a fresh project
 
-When you're ready, run:
+Here’s a clean **README-ready architecture section** you can paste directly.
 
-```bash
-npm run reset-project
+---
+
+# 📁 Project Architecture
+
+This project follows a **feature-friendly layered architecture** designed for scalability, offline support, and clean separation of concerns.
+
+---
+
+## 🧭 Root Structure
+
+```
+├── app/                # App Router (screen-level routing)
+├── src/
+│   ├── api/            # API layer (real, mock, middleware)
+│   ├── components/     # Reusable UI components
+│   ├── state/          # Global state management
+│   ├── models/         # TypeScript types & data models
+│   ├── utils/          # Helper functions & formatters
+│   ├── hooks/          # Custom React hooks
+│   └── constants/      # App constants (config, enums, config values)
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+# 📱 `app/` — Routing Layer
 
-To learn more about developing your project with Expo, look at the following resources:
+Contains screen-level components using file-based routing (e.g. Expo Router / Next-style routing).
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+* Each file = one screen
+* Handles navigation structure
+* Should contain minimal business logic
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+# 🌐 `src/api/` — Data Layer
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Centralized API handling system.
+
+### Includes:
+
+* Real API client (production backend)
+* Mock API (development/testing)
+* Middleware layer (switch between mock/real)
+* Request handlers (fetch wrappers, interceptors)
+
+### Purpose:
+
+* Abstract all network logic
+* Keep UI independent from backend changes
+
+---
+
+# 🧩 `src/components/` — UI Layer
+
+Reusable UI components:
+
+* Buttons
+* Cards
+* Inputs
+* Modals
+* Layout components
+
+### Rule:
+
+> No API calls, no business logic — UI only
+
+---
+
+# 🧠 `src/state/` — Global State
+
+State management layer (e.g. Zustand, Redux).
+
+### Used for:
+
+* Cart / orders queue
+* User session
+* Offline sync state
+* UI global states
+
+### Example responsibilities:
+
+* Offline order queue
+* Cached shared data between screens
+
+---
+
+# 📦 `src/models/` — Data Models
+
+Central TypeScript definitions:
+
+* API response types
+* Domain models (Order, Menu, User)
+* Shared interfaces
+
+### Purpose:
+
+> Single source of truth for data structure
+
+---
+
+# 🛠️ `src/utils/` — Helpers
+
+Pure utility functions:
+
+* format currency
+* date formatting
+* validation
+* transformations
+
+---
+
+# 🪝 `src/hooks/` — Custom Hooks
+
+Reusable logic built on top of React:
+
+* `useOrders()`
+* `useMenu()`
+* `useOfflineQueue()`
+
+### Purpose:
+
+> Extract reusable logic from components
+
+---
+
+# ⚡ Data Flow Architecture
+
+```
+API → api/ layer → state/cache → UI screens (app/)
+```
+
+---
+
+# 💾 Caching Strategy (Important)
+
+The app uses a **multi-layer caching system**:
+
+## 1. In-memory cache
+
+* React Query cache (fast access)
+* Used for screen transitions
+
+## 2. Persistent cache
+
+* AsyncStorage / local storage
+* Used for offline support
+
+## 3. Offline queue
+
+* Stored in state + AsyncStorage
+* Syncs when internet returns
+
+---
+
+# 🔄 Offline Flow (Orders)
+
+```
+User places order
+        ↓
+Check internet
+        ↓
+Online → send API immediately
+Offline → store in queue (state + AsyncStorage)
+        ↓
+When online returns → auto-sync queue
+```
+
+---
+
+# 🧠 Design Principles
+
+* Separation of concerns (UI / Logic / Data)
+* Offline-first capability
+* Scalable API abstraction
+* Reusable state + hooks
+* Minimal coupling between layers
+
+---
+
+# 🚀 Summary
+
+This architecture is designed for:
+
+* Menu-based ordering systems
+* Offline-first applications
+* Scalable React Native apps
+* Clean separation of API, UI, and state
+
 "# qr-ordering" 
