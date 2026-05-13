@@ -5,8 +5,9 @@
 // GET	/api/v1/orders/{id}	Get order status
 // GET	/api/v1/tables/{id}/status	Get table status
 
-import { MenuResponse } from "../models/menuResponse";
+import { MenuCategory, MenuResponse } from "../models/menuResponse";
 import { OrderData } from "../models/order";
+import { APIOrderData } from "../models/ordersFromAPI";
 import { ResponseBase } from "../models/responseBase";
 import { request } from "./axiosClient";
 
@@ -23,7 +24,7 @@ export const apiService = {
   },
 
   // GET	/api/v1/categories	List menu categories
-  async getListMenuCategories() {
+  async getListMenuCategories(): Promise<ResponseBase<MenuCategory[]>> {
     return await request({
       url: "/categories",
     });
@@ -39,14 +40,14 @@ export const apiService = {
   },
 
   // GET	/api/v1/orders/{id}	Get order status
-  async getOrderStatus(id: string) {
+  async getOrderStatus(id: string): Promise<ResponseBase<APIOrderData[]>> {
     return await request({
       url: "/orders/" + id,
     });
   },
 
   // GET	/api/v1/tables/{id}/status	Get table status
-  async getTablestatus(id: string) {
+  async getTablestatus(id: string): Promise<ResponseBase<any>> {
     return await request({
       url: `/tables/${id}/status`,
     });

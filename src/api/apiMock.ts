@@ -6,6 +6,7 @@
 // GET	/api/v1/tables/{id}/status	Get table status
 
 import { MenuResponse } from "../models/menuResponse";
+import { APIOrderData } from "../models/ordersFromAPI";
 import { ResponseBase } from "../models/responseBase";
 import { dataMock } from "./dataMock";
 
@@ -22,6 +23,8 @@ type OrderData = {
   item: MenuItem[];
   customer_note: string;
 };
+
+const orders: any[] = [];
 
 const responseSuccess = (data: any) => {
   return {
@@ -53,26 +56,61 @@ export const apiService = {
 
   // POST	/api/v1/orders	Create new order
   async postOrder(dataPost: OrderData) {
+    const minutes = 5;
+    const id = new Date().toISOString();
+    orders.push({
+      id: id,
+      table_id: dataPost.table_id,
+      remarks: dataPost.customer_note,
+      status: "Preparing",
+      estimated_time: new Date(Date.now() + minutes * 60 * 1000).toISOString(),
+      createdAt: new Date().toISOString(),
+      meta: dataPost,
+    });
+
     return responseSuccess({
-      order_id: "O12345",
-      estimated_time: "20 minutes",
+      order_id: id,
     });
   },
 
   // GET	/api/v1/orders/{id}	Get order status
-  async getOrderStatus(id: string) {
+  async getOrderStatus(id: string): Promise<ResponseBase<APIOrderData[]>> {
+    const myOrder = orders.find((order) => order.id === id);
+    const status = getOrderStatus(myOrder.createdAt, myOrder.estimated_time);
     return responseSuccess({
-      order_id: id,
-      status: "In Progress",
-      estimated_time: "15 minutes",
+      ...myOrder,
+      status: status,
     });
   },
 
   // GET	/api/v1/tables/{id}/status	Get table status
-  async getTablestatus(id: string) {
-    return responseSuccess({
+  async getTablestatus(id: string): Promise<ResponseBase<any>> {
+    const myOrders = orders.filter((order) => order.table_id === id);
+    const ids = myOrders.map((order: any) => order.id);
+    return await responseSuccess({
       table_id: id,
       status: "Occupied",
+      active_order_ids: ids,
     });
   },
 };
+
+function getOrderStatus(createdAt: Date, estimatedTime: Date) {
+  const statuses = ["Pending", "Confirmed", "Preparing", "Ready", "Served"];
+
+  const start = new Date(createdAt).getTime();
+  const end = new Date(estimatedTime).getTime();
+  const now = Date.now();
+
+  const totalDuration = end - start;
+  const elapsed = now - start;
+
+  const progress = elapsed / totalDuration;
+
+  const index = Math.min(
+    Math.floor(progress * statuses.length),
+    statuses.length - 1
+  );
+
+  return statuses[index];
+}

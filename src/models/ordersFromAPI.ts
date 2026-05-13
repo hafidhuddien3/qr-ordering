@@ -1,4 +1,6 @@
-export type CartCustomizationsOption = {
+import { CartData } from "./cart";
+
+ type OrderCustomizationsOption = {
   option_id: number;
   quantity: number;
   price_modifier: number;
@@ -6,26 +8,30 @@ export type CartCustomizationsOption = {
   group_name: string;
 };
 
-export type CartMenuItem = {
+ type OrderMenuItem = {
   id: string;
   menu_item_id: number;
   quantity: number;
-  customizations: CartCustomizationsOption[];
+  customizations: OrderCustomizationsOption[];
   price: number;
   category_id:number;
   name: string;
   total_price: number;
 };
 
-export type CartData = {
+export type APIOrderData = {
   table_id: string;
-  item: CartMenuItem[];
+  item: OrderMenuItem[];
   customer_note: string;
+  estimated_time: number;
+  status: string;
+  meta: CartData;
+  remarks: string;
 };
 
-export type CartCategory = {
+type OrderCategory = {
   id: number;
   name: string;
   sort_order: number;
-  items?: CartMenuItem[];
+  items?: OrderMenuItem[];
 };

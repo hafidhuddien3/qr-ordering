@@ -79,6 +79,21 @@ export default function RootLayout() {
               },
             }}
           />
+          <Stack.Screen
+            name="order-tracking"
+            options={{
+              title: "Order Tracking",
+              headerStyle: {
+                backgroundColor: choosedTheme.primary,
+              },
+              headerTintColor: "#FFFFFF",
+              headerTitleStyle: {
+                fontWeight: "bold",
+              },
+              headerBackVisible: false,
+
+            }}
+          />
         </Stack>
         <StatusBar style="auto" />
       </QueryClientProvider>

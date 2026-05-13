@@ -11,3 +11,5 @@ export type OrderData = {
   item: OrderMenuItem[];
   customer_note: string;
 };
+
+export type OrderStatus = "Pending" | "Confirmed" | "Preparing" | "Ready" | "Served";
