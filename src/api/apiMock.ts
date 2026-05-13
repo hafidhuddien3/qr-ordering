@@ -5,7 +5,7 @@
 // GET	/api/v1/orders/{id}	Get order status
 // GET	/api/v1/tables/{id}/status	Get table status
 
-import { MenuResponse } from "../models/menuResponse";
+import { MenuCategory, MenuResponse } from "../models/menuResponse";
 import { APIOrderData } from "../models/ordersFromAPI";
 import { ResponseBase } from "../models/responseBase";
 import { dataMock } from "./dataMock";
@@ -50,7 +50,7 @@ export const apiService = {
   },
 
   // GET	/api/v1/categories	List menu categories
-  async getListMenuCategories() {
+  async getListMenuCategories(): Promise<ResponseBase<MenuCategory[]>> {
     return responseSuccess(dataMock.categories);
   },
 
@@ -64,7 +64,7 @@ export const apiService = {
       remarks: dataPost.customer_note,
       status: "Preparing",
       estimated_time: new Date(Date.now() + minutes * 60 * 1000).toISOString(),
-      createdAt: new Date().toISOString(),
+      created_at: new Date().toISOString(),
       meta: dataPost,
     });
 
@@ -76,7 +76,7 @@ export const apiService = {
   // GET	/api/v1/orders/{id}	Get order status
   async getOrderStatus(id: string): Promise<ResponseBase<APIOrderData[]>> {
     const myOrder = orders.find((order) => order.id === id);
-    const status = getOrderStatus(myOrder.createdAt, myOrder.estimated_time);
+    const status = getOrderStatus(myOrder.created_at, myOrder.estimated_time);
     return responseSuccess({
       ...myOrder,
       status: status,
@@ -95,10 +95,10 @@ export const apiService = {
   },
 };
 
-function getOrderStatus(createdAt: Date, estimatedTime: Date) {
+function getOrderStatus(created_at: Date, estimatedTime: Date) {
   const statuses = ["Pending", "Confirmed", "Preparing", "Ready", "Served"];
 
-  const start = new Date(createdAt).getTime();
+  const start = new Date(created_at).getTime();
   const end = new Date(estimatedTime).getTime();
   const now = Date.now();
 
