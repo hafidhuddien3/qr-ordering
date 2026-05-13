@@ -244,7 +244,7 @@ export default function OrderTrackingScreen() {
             )
           );
         })}
-        <Text
+        {orders[0]?.data?.remarks && <><Text
           style={{
             fontSize: 18,
             fontWeight: "bold",
@@ -265,6 +265,7 @@ export default function OrderTrackingScreen() {
         >
           {orders[0]?.data?.remarks}
         </Text>
+        </>}
       </ScrollView>
       <View
         style={{
