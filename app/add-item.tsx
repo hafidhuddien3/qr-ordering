@@ -38,6 +38,7 @@ export default function CustomizeScreen() {
     });
 
     addItem({
+      id: Date.now().toString(),
       menu_item_id: item.id,
       quantity: quantity,
       customizations,
