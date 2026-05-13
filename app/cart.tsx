@@ -12,6 +12,7 @@ import { ScrollView, Text, TextInput, View } from "react-native";
 export default function CartScreen() {
   const [menuByCategory, setMenuByCategory] = useState<CartCategory[]>([]);
   const [note, setNote] = useState("");
+  const [orderLoading, setOrderLoading] = useState(false);
 
   const cart = useCartStore((state) => state.order);
   const categories = useCategoryStore((state) => state.categories);
@@ -62,18 +63,21 @@ export default function CartScreen() {
     if (cart.item.length === 0) return alert("Cart is empty");
     cart.customer_note = note;
     utilsConfirm({
-      message: "Order now",
+      message: "Order now?",
       isDestructiveStyle: true,
       onConfirm: () => {
+        setOrderLoading(true);
         api
           .postOrder(cart)
           .then((res: any) => {
-            if (res?.data?.order_id) {
+             setOrderLoading(false);
+            if (res?.data?.id) {
               clearCart();
               router.replace(`/order-tracking?tableId=${cart.table_id}`);
             }
           })
           .catch((err) => {
+             setOrderLoading(false);
             alert(
               "Failed to place order. Please try again.\nError: " +
                 (err?.message || "Unknown error")
@@ -140,7 +144,7 @@ export default function CartScreen() {
                         ).toFixed(2)}
                       </Text>
                     </View>
-                    <View style={{ flex: 1, paddingTop: 10, gap: 10 }}>
+                    <View style={{  paddingTop: 10, gap: 10, width: '50%' }}>
                       <View
                         style={{
                           flex: 1,
@@ -171,7 +175,7 @@ export default function CartScreen() {
                           }
                           padding={3}
                         />
-                        <Text style={{ fontSize: 16 }}>{item.quantity}</Text>
+                        <Text style={{ fontSize: 16 }}>{item.quantity} pcs</Text>
                         <IonIconButton
                           iconName={"add"}
                           onPress={() =>
@@ -236,7 +240,7 @@ export default function CartScreen() {
             Total USD {totalPrice.toFixed(2)}
           </Text>
         </View>
-        <IonIconButton text={"Order"} onPress={onOrder} />
+        <IonIconButton text={"Order"} onPress={onOrder} loading={orderLoading} />
       </View>
     </View>
   );

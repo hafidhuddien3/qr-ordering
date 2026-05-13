@@ -22,6 +22,7 @@ export default function IonIconButton({ onPress, iconName, text, padding, loadin
         borderRadius: 10,
         gap: 5
       }}
+      disabled={loading}
       onPress={onPress}
     >
       {iconName && <Ionicons name={iconName} size={24} color="white" />}

@@ -37,7 +37,7 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)/index" options={{ headerShown: false }} />
           <Stack.Screen
             name="qr-scanner"
-            options={{ presentation: "modal", title: "QR Scanner" }}
+            options={{ title: "QR Scanner" }}
           />
           <Stack.Screen
             name="add-item"
