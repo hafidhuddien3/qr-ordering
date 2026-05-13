@@ -9,7 +9,7 @@ import { ThemedView } from "@/src/components/themed-view";
 import { choosedTheme } from "@/src/constants/theme";
 import { useCartStore } from "@/src/state/stores/useCartStore";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 
 const isDevMode = true;
 
@@ -23,54 +23,54 @@ export default function HomeScreen() {
         <Ionicons name="restaurant" size={300} color={choosedTheme.secondary} />
       }
     >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome to {"\n"}QR Ordering!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedText>
-        {`Please click start scan QR code to see menu. If you have any questions, feel free to ask our staff for assistance. Enjoy your meal!`}
-      </ThemedText>
-      <ThemedView style={styles.stepContainer}>
-        <View
-          style={{
-            padding: 5,
-            gap: 10,
-            maxWidth: 200,
-          }}
-        >
-          <Link href="/qr-scanner">
-            <ScanButton />
-          </Link>
-          {/* developer testing button, please ignore: */}
-          {isDevMode && (
-            <IonIconButton
-              iconName="construct-outline"
-              text="menu?tableId=T001"
-              onPress={() => {
-                router.push("/menu?tableId=T001");
-              }}
-            />
-          )}
-          {cart.table_id && (
-            <>
-            <IonIconButton
-              iconName="time-outline"
-              text="Last Scanned Menu"
-              onPress={() => {
-                router.push(`/menu?tableId=${cart.table_id}`);
-              }}
-            />
-            <IonIconButton
-              iconName="fast-food-outline"
-              text="Order Tracking"
-              onPress={() => {
-                router.push(`/order-tracking?tableId=${cart.table_id}`);
-              }}
-            />
-            </>
-          )}
-        </View>
-      </ThemedView>
+      <View style={{ flex: 1, padding: 32, gap: 16, overflow: "hidden" }}>
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type="title">Welcome to {"\n"}QR Ordering!</ThemedText>
+          <HelloWave />
+        </ThemedView>
+        <ThemedText>
+          {`Please click start scan QR code to see menu. If you have any questions, feel free to ask our staff for assistance. Enjoy your meal!`}
+        </ThemedText>
+        <ThemedView style={styles.stepContainer}>
+          <View
+            style={{
+              padding: 5,
+              gap: 10,
+              maxWidth: 200,
+            }}
+          >
+              <ScanButton onPress={()=>router.push("/qr-scanner")} />
+            {/* developer testing button, please ignore: */}
+            {isDevMode && (
+              <IonIconButton
+                iconName="construct-outline"
+                text="menu?tableId=T001"
+                onPress={() => {
+                  router.push("/menu?tableId=T001");
+                }}
+              />
+            )}
+            {cart.table_id && (
+              <>
+                <IonIconButton
+                  iconName="time-outline"
+                  text="Last Scanned Table"
+                  onPress={() => {
+                    router.push(`/menu?tableId=${cart.table_id}`);
+                  }}
+                />
+                <IonIconButton
+                  iconName="fast-food-outline"
+                  text="Order Tracking"
+                  onPress={() => {
+                    router.push(`/order-tracking?tableId=${cart.table_id}`);
+                  }}
+                />
+              </>
+            )}
+          </View>
+        </ThemedView>
+      </View>
     </ParallaxScrollView>
   );
 }

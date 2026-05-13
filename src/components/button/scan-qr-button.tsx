@@ -4,9 +4,10 @@ import { Text, TouchableOpacity } from "react-native";
 
 type Props = {
   children?: React.ReactNode;
+  onPress?: () => void;
 };
 
-export default function ScanButton({ children }: Props) {
+export default function ScanButton({ children, onPress }: Props) {
   return (
     <TouchableOpacity
       style={{
@@ -16,7 +17,7 @@ export default function ScanButton({ children }: Props) {
         padding: 12,
         borderRadius: 8,
       }}
-      onPress={() => console.log("Open QR Scanner")}
+      onPress={onPress}
     >
     { children }
 
