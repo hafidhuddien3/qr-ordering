@@ -52,6 +52,14 @@ export default function HomeScreen() {
             />
           )}
           {cart.table_id && (
+            <>
+            <IonIconButton
+              iconName="time-outline"
+              text="Last Scanned Menu"
+              onPress={() => {
+                router.push(`/menu?tableId=${cart.table_id}`);
+              }}
+            />
             <IonIconButton
               iconName="fast-food-outline"
               text="Order Tracking"
@@ -59,6 +67,7 @@ export default function HomeScreen() {
                 router.push(`/order-tracking?tableId=${cart.table_id}`);
               }}
             />
+            </>
           )}
         </View>
       </ThemedView>
