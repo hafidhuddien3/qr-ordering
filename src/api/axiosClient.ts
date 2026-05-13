@@ -1,6 +1,10 @@
 import axios, { AxiosRequestConfig, Method } from "axios";
 
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+const apiUrlDev = process.env.EXPO_PUBLIC_API_URL;
+const apiUrlProd = process.env.EXPO_PUBLIC_API_URL_PROD;
+
+const isProd = true // change this to false if you want to test with development API, or set the environment variable EXPO_PUBLIC_API_ISPROD to "true" or "false" to control it without changing the code.
+const apiUrl = isProd ? apiUrlProd : apiUrlDev;
 
 const api = axios.create({
   baseURL: apiUrl,
