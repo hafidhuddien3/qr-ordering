@@ -25,7 +25,7 @@ export type APIOrderData = {
   customer_note: string;
   estimated_time: number;
   status: string;
-  meta: CartData;
+  cart: CartData;
   remarks: string;
 };
 
