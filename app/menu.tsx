@@ -20,7 +20,7 @@ export default function MenuScreen() {
   const { tableId } = useLocalSearchParams();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["todos", tableId],
+    queryKey: ["menu", tableId],
     queryFn: () => api.getMenuForATable(tableId.toString()),
   });
 
