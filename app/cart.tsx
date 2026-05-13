@@ -5,20 +5,19 @@ import { CartCategory } from "@/src/models/cart";
 import { useCartStore } from "@/src/state/stores/useCartStore";
 import { useCategoryStore } from "@/src/state/stores/useCategoryStore";
 import { utilsConfirm } from "@/src/utils/confirm";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { ScrollView, Text, TextInput, View } from "react-native";
 
 export default function CartScreen() {
   const [menuByCategory, setMenuByCategory] = useState<CartCategory[]>([]);
-  const [search, setSearch] = useState("");
-
-  const { tableId } = useLocalSearchParams();
+  const [note, setNote] = useState("");
 
   const cart = useCartStore((state) => state.order);
   const categories = useCategoryStore((state) => state.categories);
   const removeItem = useCartStore((state) => state.removeItem);
   const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   const totalPrice = useMemo(() => {
     return cart.item.reduce((total, item) => {
@@ -47,27 +46,39 @@ export default function CartScreen() {
   }, [cart]);
 
   //for changing quantity
-  const handleQuantityChange = (menuItemId: number, newQuantity: number) => {
+  const handleQuantityChange = (id: string, newQuantity: number) => {
     if (newQuantity < 1) {
       utilsConfirm({
         message: "Remove this item from cart?",
         isDestructiveStyle: true,
-        onConfirm: () => removeItem(menuItemId),
+        onConfirm: () => removeItem(id),
       });
     } else {
-      updateItemQuantity(menuItemId, newQuantity);
+      updateItemQuantity(id, newQuantity);
     }
   };
 
   const onOrder = () => {
     if (cart.item.length === 0) return alert("Cart is empty");
+    cart.customer_note = note;
     utilsConfirm({
       message: "Order now",
       isDestructiveStyle: true,
       onConfirm: () => {
-        api.postOrder(cart).then((res) => {
-          console.log("Order response", res);
-        });
+        api
+          .postOrder(cart)
+          .then((res: any) => {
+            if (res?.data?.order_id) {
+              clearCart();
+              router.replace(`/order-tracking?tableId=${cart.table_id}`);
+            }
+          })
+          .catch((err) => {
+            alert(
+              "Failed to place order. Please try again.\nError: " +
+                (err?.message || "Unknown error")
+            );
+          });
       },
     });
   };
@@ -154,7 +165,7 @@ export default function CartScreen() {
                           iconName={"remove"}
                           onPress={() =>
                             handleQuantityChange(
-                              item.menu_item_id,
+                              item.id,
                               item.quantity - 1
                             )
                           }
@@ -165,7 +176,7 @@ export default function CartScreen() {
                           iconName={"add"}
                           onPress={() =>
                             handleQuantityChange(
-                              item.menu_item_id,
+                              item.id,
                               item.quantity + 1
                             )
                           }
@@ -195,8 +206,8 @@ export default function CartScreen() {
         <TextInput
           placeholder="Customer note..."
           placeholderTextColor={"gray"}
-          value={search}
-          onChangeText={setSearch}
+          value={note}
+          onChangeText={setNote}
           style={{
             padding: 10,
             borderWidth: 1,
