@@ -22,11 +22,14 @@ export default function MenuScreen() {
   const { data, isLoading } = useQuery({
     queryKey: ["menu", tableId],
     queryFn: () => api.getMenuForATable(tableId.toString()),
+    staleTime: 1000 * 60 * 60 * 6, // 6 hours
+    gcTime: 1000 * 60 * 60 * 24 * 2, // 2 day
+    enabled: !!tableId,
   });
 
   const cart = useCartStore((state) => state.order);
-  const setCategories = useCategoryStore((state) => state.setCategories)
-  const setTableId = useCartStore((state) => state.setTableId)
+  const setCategories = useCategoryStore((state) => state.setCategories);
+  const setTableId = useCartStore((state) => state.setTableId);
 
   const totalPrice = useMemo(() => {
     return cart.item.reduce((total, item) => {
@@ -59,12 +62,21 @@ export default function MenuScreen() {
     }
   }, [data]);
 
-
   return (
     <View style={{ flex: 1, backgroundColor: choosedTheme.background }}>
       <Stack.Screen
         options={{ title: "Menu at " + data?.data?.restaurant.name }}
       />
+      <Text
+        style={{
+          fontSize: 18,
+          fontWeight: "bold",
+          margin: 10,
+          marginBottom: 1,
+        }}
+      >
+        {tableId ? `Table ID: ${tableId}` : "No Table ID"}
+      </Text>
       <TextInput
         placeholder="Search menu..."
         value={search}
@@ -80,7 +92,14 @@ export default function MenuScreen() {
       <ScrollView>
         {filteredMenu.map((category) => (
           <View key={category.id}>
-            <Text style={{ fontSize: 18, fontWeight: "bold", margin: 10, marginBottom: 1 }}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "bold",
+                margin: 10,
+                marginBottom: 1,
+              }}
+            >
               {category.name}
             </Text>
 
@@ -101,11 +120,11 @@ export default function MenuScreen() {
                     borderBottomWidth: 1,
                     borderColor: "#eee",
                     maxWidth: "80%",
-                    gap:3
+                    gap: 3,
                   }}
                 >
                   <Text style={{ fontSize: 16 }}>{item.name}</Text>
-                  <Text style={{ color: "gray", }}>{item.description}</Text>
+                  <Text style={{ color: "gray" }}>{item.description}</Text>
                   <Text>USD {item.price}</Text>
                 </View>
                 <AddButton
@@ -129,7 +148,7 @@ export default function MenuScreen() {
           flexDirection: "row",
           padding: 10,
           backgroundColor: choosedTheme.secondary,
-                paddingRight:25
+          paddingRight: 25,
         }}
       >
         <View
@@ -137,12 +156,17 @@ export default function MenuScreen() {
             flex: 1,
             justifyContent: "center",
             alignItems: "center",
-      
           }}
         >
-          <Text style={{ fontWeight: "bold", color:'white' }}>USD {totalPrice.toFixed(2)}</Text>
+          <Text style={{ fontWeight: "bold", color: "white" }}>
+            USD {totalPrice.toFixed(2)}
+          </Text>
         </View>
-        <IonIconButton iconName={'cart'} onPress={() => router.push("/cart")} text={cart.item.length.toString()}/>
+        <IonIconButton
+          iconName={"cart"}
+          onPress={() => router.push("/cart")}
+          text={cart.item.length.toString()}
+        />
       </View>
     </View>
   );
