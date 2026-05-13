@@ -55,7 +55,6 @@ Contains screen-level components using file-based routing (e.g. Expo Router / Ne
 
 * Each file = one screen
 * Handles navigation structure
-* Should contain minimal business logic
 
 ---
 
@@ -199,7 +198,7 @@ When online returns → auto-sync queue
 * Separation of concerns (UI / Logic / Data)
 * Offline-first capability
 * Scalable API abstraction
-* Reusable state + hooks
+* Reusable state
 * Minimal coupling between layers
 
 ---
