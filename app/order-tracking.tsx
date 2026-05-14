@@ -20,8 +20,10 @@ import { calculateTotal } from "@/src/utils/cart";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function OrderTrackingScreen() {
+  const { t } = useTranslation();
   const { tableId } = useLocalSearchParams();
 
   const [menuByCategory, setMenuByCategory] = useState<CartCategory[]>([]);
@@ -30,7 +32,7 @@ export default function OrderTrackingScreen() {
   const { data: dataTableStatus, isLoading: isLoadingTableStatus } = useQuery({
     queryKey: ["table-status", tableId],
     queryFn: () => api.getTablestatus(tableId.toString()),
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   });
 
   const orderIds = dataTableStatus?.data?.active_order_ids || [];
@@ -101,7 +103,7 @@ export default function OrderTrackingScreen() {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" color={choosedTheme.primary} />
-        <Text>Loading...</Text>
+        <Text>{t("loading")}</Text>
       </View>
     );
   }
@@ -121,7 +123,7 @@ export default function OrderTrackingScreen() {
             }}
           >
             <ThemedText type="defaultSemiBold" style={{ textAlign: "center" }}>
-              You have no Pending Order
+              {t("no_pending_order")}
             </ThemedText>
           </View>
         }
@@ -136,7 +138,7 @@ export default function OrderTrackingScreen() {
             }}
           >
             <Link href="/">
-              <IonIconButton iconName="home" text="Back to Home" />
+              <IonIconButton iconName="home" text={t("back_to_home")} />
             </Link>
           </View>
         </ThemedView>
@@ -159,8 +161,8 @@ export default function OrderTrackingScreen() {
         >
           <ThemedText type="defaultSemiBold" style={{ textAlign: "center" }}>
             {orders[0]?.data?.status == "Served"
-              ? "Enjoy your meal!"
-              : `Estimated Time : ${minutes}m ${seconds}s`}
+              ? t("enjoy_meal")
+              : `${t("estimated_time")} : ${minutes}m ${seconds}s`}
           </ThemedText>
           <OrderStatusStepper currentStatus={orders[0]?.data?.status || ""} />
         </View>
@@ -177,7 +179,7 @@ export default function OrderTrackingScreen() {
       >
         <ThemedView style={styles.titleContainer}></ThemedView>
         <ThemedText type="defaultSemiBold" style={{ textAlign: "center" }}>
-          {`Order ID: ${orderIds.join(", ")}`}
+          {t("order_id")+`: ${orderIds.join(", ")}`}
         </ThemedText>
 
         <ScrollView>
@@ -277,12 +279,11 @@ export default function OrderTrackingScreen() {
                   marginBottom: 0,
                 }}
               >
-                Customer Note
+                {t("customer_note")}
               </Text>
               <Text
                 style={{
                   padding: 10,
-                  borderWidth: 1,
                   borderRadius: 8,
                   margin: 5,
                   marginBottom: 20,
@@ -310,7 +311,7 @@ export default function OrderTrackingScreen() {
             }}
           >
             <Text style={{ fontWeight: "bold", color: "white" }}>
-              Total USD {totalPrice?.toFixed(2) || "0.00"}
+              {t("total")} USD {totalPrice?.toFixed(2) || "0.00"}
             </Text>
           </View>
         </View>
@@ -321,7 +322,7 @@ export default function OrderTrackingScreen() {
           style={{ padding: 5, justifyContent: "center", alignItems: "center" }}
         >
           <Link href="/">
-            <IonIconButton iconName="home" text="Back to Home" />
+            <IonIconButton iconName="home" text={t("back_to_home")} />
           </Link>
         </View>
       </ThemedView>

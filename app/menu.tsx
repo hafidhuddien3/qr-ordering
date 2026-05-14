@@ -9,9 +9,11 @@ import { useCategoryStore } from "@/src/state/stores/useCategoryStore";
 import { useQuery } from "@tanstack/react-query";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView, Text, TextInput, View } from "react-native";
 
 export default function MenuScreen() {
+  const { t } = useTranslation();
   const [menuByCategory, setMenuByCategory] = useState<
     MenuResponse["categories"]
   >([]);
@@ -26,8 +28,6 @@ export default function MenuScreen() {
     gcTime: 1000 * 60 * 60 * 24 * 2, // 2 day
     enabled: !!tableId,
   });
-
-  console.log("Fetched menu data:", data);
 
   const cart = useCartStore((state) => state.order);
   const setCategories = useCategoryStore((state) => state.setCategories);
@@ -67,7 +67,7 @@ export default function MenuScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: choosedTheme.background }}>
       <Stack.Screen
-        options={{ title: "Menu at " + data?.data?.restaurant.name }}
+        options={{ title: t("menu_at")+" " + data?.data?.restaurant.name }}
       />
       <Text
         style={{
@@ -77,10 +77,10 @@ export default function MenuScreen() {
           marginBottom: 1,
         }}
       >
-        {tableId ? `Table ID: ${tableId}` : "No Table ID"}
+        {tableId ? `${t("table_id")}: ${tableId}` : t("no_table_id")}
       </Text>
       <TextInput
-        placeholder="Search menu..."
+        placeholder={t("search_menu_placeholder")}
         value={search}
         onChangeText={setSearch}
         style={{

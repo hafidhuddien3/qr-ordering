@@ -6,9 +6,11 @@ import { useCartStore } from "@/src/state/stores/useCartStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
 export default function CustomizeScreen() {
+  const { t } = useTranslation();
   const item = cacheObject.currentMenuItem;
   const [quantity, setQuantity] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState<{
@@ -105,7 +107,7 @@ export default function CustomizeScreen() {
       <Text style={{ marginTop: 4, color: "#666" }}>{item?.description}</Text>
 
       <Text style={{ marginTop: 10, fontSize: 18 }}>
-        Base: ${item?.price.toFixed(2)}
+        {t("base_price")}: ${item?.price.toFixed(2)}
       </Text>
 
       {/* CUSTOMIZATION */}
@@ -144,7 +146,7 @@ export default function CustomizeScreen() {
                       +${opt.price_modifier}
                     </Text>
                   ) : (
-                    <Text style={{ textAlign: "right" }}>Free</Text>
+                    <Text style={{ textAlign: "right" }}>{t("free")}</Text>
                   )}
                   <Radio selected={selected} />
                 </View>
@@ -163,7 +165,7 @@ export default function CustomizeScreen() {
           marginTop: 30,
         }}
       >
-        <Text style={{ fontSize: 16 }}>Quantity</Text>
+        <Text style={{ fontSize: 16 }}>{t("quantity")}</Text>
 
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
           <Pressable onPress={() => setQuantity((q) => Math.max(1, q - 1))}>
@@ -181,7 +183,7 @@ export default function CustomizeScreen() {
       {/* TOTAL */}
       <View style={{ marginTop: 30 }}>
         <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-          Total: ${totalPrice.toFixed(2)}
+          {t("total")}: ${totalPrice.toFixed(2)}
         </Text>
       </View>
 
@@ -202,7 +204,7 @@ export default function CustomizeScreen() {
               (!selectedOptions[group.id] ||
                 selectedOptions[group.id].length === 0)
             ) {
-              alert(`Please select at least one option for "${group.name}"`);
+              alert(t("please_select_option")+` "${group.name}"`);
               return;
             }
           }
@@ -210,7 +212,7 @@ export default function CustomizeScreen() {
           handleAdd();
         }}
       >
-        <Text style={{ color: "#fff", fontWeight: "bold" }}>Add to Cart</Text>
+        <Text style={{ color: "#fff", fontWeight: "bold" }}>{t("add_to_cart")}</Text>
       </Pressable>
     </ScrollView>
   );

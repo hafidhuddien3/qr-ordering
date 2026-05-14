@@ -10,10 +10,12 @@ import { choosedTheme } from "@/src/constants/theme";
 import { useCartStore } from "@/src/state/stores/useCartStore";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 const isDevMode = true;
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const cart = useCartStore((state) => state.order);
 
   return (
@@ -25,11 +27,11 @@ export default function HomeScreen() {
     >
       <View style={{ flex: 1, padding: 32, gap: 16, overflow: "hidden" }}>
         <ThemedView style={styles.titleContainer}>
-          <ThemedText type="title">Welcome to {"\n"}QR Ordering!</ThemedText>
+          <ThemedText type="title">{t("welcome_title")}</ThemedText>
           <HelloWave />
         </ThemedView>
         <ThemedText>
-          {`Please click start scan QR code to see menu. If you have any questions, feel free to ask our staff for assistance. Enjoy your meal!`}
+          {t("welcome_description")}
         </ThemedText>
         <ThemedView style={styles.stepContainer}>
           <View
@@ -54,14 +56,14 @@ export default function HomeScreen() {
               <>
                 <IonIconButton
                   iconName="time-outline"
-                  text="Last Scanned Table"
+                  text={t("last_scanned_table")}
                   onPress={() => {
                     router.push(`/menu?tableId=${cart.table_id}`);
                   }}
                 />
                 <IonIconButton
                   iconName="fast-food-outline"
-                  text="Order Tracking"
+                  text={t("order_tracking")}
                   onPress={() => {
                     router.push(`/order-tracking?tableId=${cart.table_id}`);
                   }}

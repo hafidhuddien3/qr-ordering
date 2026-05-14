@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Text, TouchableOpacity } from "react-native";
 
 type Props = {
@@ -8,6 +9,7 @@ type Props = {
 };
 
 export default function ScanButton({ children, onPress }: Props) {
+  const { t } = useTranslation();
   return (
     <TouchableOpacity
       style={{
@@ -23,7 +25,7 @@ export default function ScanButton({ children, onPress }: Props) {
       <Ionicons name="qr-code-outline" size={24} color="white" />
 
       <Text style={{ color: "white", marginLeft: 8 }}>
-        Start Scan QR
+        {t("start_qr_scan")}
       </Text>
     </TouchableOpacity>
   );

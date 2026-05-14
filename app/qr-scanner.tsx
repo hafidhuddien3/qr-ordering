@@ -3,9 +3,11 @@ import { ThemedText } from "@/src/components/themed-text";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { Link, router } from "expo-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function QRScanner() {
+  const { t } = useTranslation();
   const [permission, requestPermission] = useCameraPermissions();
   const [scannedSuccess, setScannedSuccess] = useState(false);
 
@@ -15,7 +17,7 @@ export default function QRScanner() {
 
   if (!permission.granted) {
     requestPermission();
-    return <Text>Requesting camera permission...</Text>;
+    return <Text>{t("request_camera_permission")}</Text>;
   }
 
   return (
@@ -33,7 +35,7 @@ export default function QRScanner() {
                 // format: ipot://table/{tableId}
                 data.includes("ipot://table/") && data.split("ipot://table/").length > 1
                   ? tableId = data.split("ipot://table/")[1]
-                  : alert("Invalid QR code format. Please contact staff for assistance.");
+                  : alert(t("invalid_qr"));
 
                 tableId && api
                   .getMenuForATable(tableId)
@@ -53,7 +55,7 @@ export default function QRScanner() {
         }
       />
       <Link href="/" dismissTo style={styles.link}>
-        <ThemedText type="link">Close QR Scanner</ThemedText>
+        <ThemedText type="link">{t("close_qr_scanner")}</ThemedText>
       </Link>
     </>
   );

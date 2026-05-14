@@ -10,6 +10,8 @@ import "react-native-reanimated";
 
 import { choosedTheme } from "@/src/constants/theme";
 import { useColorScheme } from "@/src/hooks/use-color-scheme";
+import '@/src/i18n';
+import { useTranslation } from "react-i18next";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +20,7 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
+    const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const isDisableDualTheme = true;
 
@@ -33,8 +36,8 @@ export default function RootLayout() {
     >
       <QueryClientProvider client={queryClient}>
         <Stack>
-          {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
-          <Stack.Screen name="(tabs)/index" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          {/* <Stack.Screen name="(tabs)/index" options={{ headerShown: false }} /> */}
           <Stack.Screen
             name="qr-scanner"
             options={{ title: "QR Scanner" }}
@@ -43,7 +46,7 @@ export default function RootLayout() {
             name="add-item"
             options={{
               presentation: "modal",
-              title: "Add Item",
+              title: t('add_item'),
               headerStyle: {
                 backgroundColor: choosedTheme.primary,
               },
@@ -56,7 +59,7 @@ export default function RootLayout() {
           <Stack.Screen
             name="menu"
             options={{
-              title: "Menu",
+              title: t('menu'),
               headerStyle: {
                 backgroundColor: choosedTheme.primary,
               },
@@ -69,7 +72,7 @@ export default function RootLayout() {
           <Stack.Screen
             name="cart"
             options={{
-              title: "Cart",
+              title: t('cart'),
               headerStyle: {
                 backgroundColor: choosedTheme.primary,
               },
@@ -82,7 +85,7 @@ export default function RootLayout() {
           <Stack.Screen
             name="order-tracking"
             options={{
-              title: "Order Tracking",
+              title: t('order_tracking'),
               headerStyle: {
                 backgroundColor: choosedTheme.primary,
               },

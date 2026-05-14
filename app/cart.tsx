@@ -8,9 +8,11 @@ import { calculateTotal } from "@/src/utils/cart";
 import { utilsConfirm } from "@/src/utils/confirm";
 import { router, Stack } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView, Text, TextInput, View } from "react-native";
 
 export default function CartScreen() {
+  const { t } = useTranslation();
   const [menuByCategory, setMenuByCategory] = useState<CartCategory[]>([]);
   const [note, setNote] = useState("");
   const [orderLoading, setOrderLoading] = useState(false);
@@ -45,7 +47,7 @@ export default function CartScreen() {
   const handleQuantityChange = (id: string, newQuantity: number) => {
     if (newQuantity < 1) {
       utilsConfirm({
-        message: "Remove this item from cart?",
+        message: t("remove_item_confirm"),
         isDestructiveStyle: true,
         onConfirm: () => removeItem(id),
       });
@@ -55,10 +57,10 @@ export default function CartScreen() {
   };
 
   const onOrder = () => {
-    if (cart.item.length === 0) return alert("Cart is empty");
+    if (cart.item.length === 0) return alert(t("cart_empty"));
     cart.customer_note = note;
     utilsConfirm({
-      message: "Order now?",
+      message: t("order_now_confirm"),
       isDestructiveStyle: true,
       onConfirm: () => {
         setOrderLoading(true);
@@ -74,7 +76,7 @@ export default function CartScreen() {
           .catch((err) => {
              setOrderLoading(false);
             alert(
-              "Failed to place order. Please try again.\nError: " +
+              t("place_order_failed")+"\nError: " +
                 (err?.message || "Unknown error")
             );
           });
@@ -84,7 +86,7 @@ export default function CartScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: choosedTheme.background }}>
-      <Stack.Screen options={{ title: "Cart for Table ID " + cart.table_id }} />
+      <Stack.Screen options={{ title: t("cart_table_id")+" " + cart.table_id }} />
 
       <ScrollView>
         {menuByCategory.map((category) => {
@@ -201,10 +203,10 @@ export default function CartScreen() {
             marginBottom: 0,
           }}
         >
-          Customer Note
+          {t("customer_note")}
         </Text>
         <TextInput
-          placeholder="Customer note..."
+          placeholder={t("customer_note_placeholder")}
           placeholderTextColor={"gray"}
           value={note}
           onChangeText={setNote}
@@ -233,10 +235,10 @@ export default function CartScreen() {
           }}
         >
           <Text style={{ fontWeight: "bold", color: "white" }}>
-            Total USD {totalPrice.toFixed(2)}
+            {t("total")} USD {totalPrice.toFixed(2)}
           </Text>
         </View>
-        <IonIconButton text={"Order"} onPress={onOrder} loading={orderLoading} />
+        <IonIconButton text={t("order")} onPress={onOrder} loading={orderLoading} />
       </View>
     </View>
   );
