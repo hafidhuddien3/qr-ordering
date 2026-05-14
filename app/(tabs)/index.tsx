@@ -41,7 +41,7 @@ export default function HomeScreen() {
           >
               <ScanButton onPress={()=>router.push("/qr-scanner")} />
             {/* developer testing button, please ignore: */}
-            {isDevMode && (
+            {isDevMode ? (
               <IonIconButton
                 iconName="construct-outline"
                 text="menu?tableId=T001"
@@ -49,8 +49,8 @@ export default function HomeScreen() {
                   router.push("/menu?tableId=T001");
                 }}
               />
-            )}
-            {cart.table_id && (
+            ): null}
+            {cart.table_id ? (
               <>
                 <IonIconButton
                   iconName="time-outline"
@@ -67,7 +67,7 @@ export default function HomeScreen() {
                   }}
                 />
               </>
-            )}
+            ): null}
           </View>
         </ThemedView>
       </View>

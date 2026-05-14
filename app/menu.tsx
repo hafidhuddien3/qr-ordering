@@ -27,6 +27,8 @@ export default function MenuScreen() {
     enabled: !!tableId,
   });
 
+  console.log("Fetched menu data:", data);
+
   const cart = useCartStore((state) => state.order);
   const setCategories = useCategoryStore((state) => state.setCategories);
   const setTableId = useCartStore((state) => state.setTableId);

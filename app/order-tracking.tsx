@@ -16,6 +16,7 @@ import { choosedTheme } from "@/src/constants/theme";
 import { CartCategory } from "@/src/models/cart";
 import { APIOrderData } from "@/src/models/ordersFromAPI";
 import { ResponseBase } from "@/src/models/responseBase";
+import { calculateTotal } from "@/src/utils/cart";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
@@ -75,13 +76,8 @@ export default function OrderTrackingScreen() {
   const seconds = Math.floor((diffMs / 1000) % 60);
 
   const totalPrice = useMemo(() => {
-    return orders[0]?.data?.cart?.item.reduce((total, item) => {
-      let itemPrice = item.price || 0;
-      item.customizations.forEach((customization) => {
-        itemPrice += customization.price_modifier || 0;
-      });
-      return total + itemPrice * item.quantity;
-    }, 0);
+    if (!orders[0]?.data?.cart) return 0;
+    return calculateTotal(orders[0]?.data?.cart)
   }, [orders?.[0]?.data?.cart]);
 
   useEffect(() => {

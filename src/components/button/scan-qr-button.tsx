@@ -19,7 +19,6 @@ export default function ScanButton({ children, onPress }: Props) {
       }}
       onPress={onPress}
     >
-    { children }
 
       <Ionicons name="qr-code-outline" size={24} color="white" />
 

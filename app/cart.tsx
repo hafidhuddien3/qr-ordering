@@ -4,6 +4,7 @@ import { choosedTheme } from "@/src/constants/theme";
 import { CartCategory } from "@/src/models/cart";
 import { useCartStore } from "@/src/state/stores/useCartStore";
 import { useCategoryStore } from "@/src/state/stores/useCategoryStore";
+import { calculateTotal } from "@/src/utils/cart";
 import { utilsConfirm } from "@/src/utils/confirm";
 import { router, Stack } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
@@ -21,13 +22,7 @@ export default function CartScreen() {
   const clearCart = useCartStore((state) => state.clearCart);
 
   const totalPrice = useMemo(() => {
-    return cart.item.reduce((total, item) => {
-      let itemPrice = item.price || 0;
-      item.customizations.forEach((customization) => {
-        itemPrice += customization.price_modifier || 0;
-      });
-      return total + itemPrice * item.quantity;
-    }, 0);
+    return calculateTotal(cart)
   }, [cart]);
 
   useEffect(() => {
@@ -178,6 +173,7 @@ export default function CartScreen() {
                         <Text style={{ fontSize: 16 }}>{item.quantity} pcs</Text>
                         <IonIconButton
                           iconName={"add"}
+                          testID="add-button"
                           onPress={() =>
                             handleQuantityChange(
                               item.id,
