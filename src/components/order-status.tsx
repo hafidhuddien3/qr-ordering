@@ -152,6 +152,8 @@ export default function OrderStatusStepper({ currentStatus }: Props) {
 
                 <Text
                   style={{
+                    width: 70,
+                    textAlign: "center",
                     marginTop: 8,
                     fontSize: 12,
                     color: active ? "#fff" : "#9ca3af",

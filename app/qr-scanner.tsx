@@ -31,26 +31,37 @@ export default function QRScanner() {
           scannedSuccess
             ? undefined
             : ({ data }) => {
+                setScannedSuccess(true);
                 let tableId = null;
                 // format: ipot://table/{tableId}
-                data.includes("ipot://table/") && data.split("ipot://table/").length > 1
-                  ? tableId = data.split("ipot://table/")[1]
-                  : alert(t("invalid_qr"));
+                const invalidQR = () => {
+                  alert(t("invalid_qr"));
+                  setTimeout(() => {
+                    setScannedSuccess(false);
+                  }, 3000);
+                };
 
-                tableId && api
-                  .getMenuForATable(tableId)
-                  .then((response: any) => {
-                    if (response.success == true) {
-                      setScannedSuccess(true);
-                      router.replace(`/menu?tableId=${tableId}`);
+                data.includes("ipot://table/") &&
+                data.split("ipot://table/").length > 1
+                  ? (tableId = data.split("ipot://table/")[1])
+                  : invalidQR();
 
-                    } else {
-                      alert(response?.message);
-                    }
-                  })
-                  .catch((error) => {
-                    alert("Error: " + error?.message);
-                  });
+                tableId &&
+                  api
+                    .getMenuForATable(tableId)
+                    .then((response: any) => {
+                      if (response.success == true) {
+                        setScannedSuccess(true);
+                        router.replace(`/menu?tableId=${tableId}`);
+                      } else {
+                        setScannedSuccess(false);
+                        alert(response?.message);
+                      }
+                    })
+                    .catch((error) => {
+                      setScannedSuccess(false);
+                      alert("Error: " + error?.message);
+                    });
               }
         }
       />

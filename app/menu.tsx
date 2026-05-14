@@ -11,6 +11,7 @@ import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, Text, TextInput, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MenuScreen() {
   const { t } = useTranslation();
@@ -65,7 +66,7 @@ export default function MenuScreen() {
   }, [data]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: choosedTheme.background }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: choosedTheme.background }}>
       <Stack.Screen
         options={{ title: t("menu_at")+" " + data?.data?.restaurant.name }}
       />
@@ -170,6 +171,6 @@ export default function MenuScreen() {
           text={cart.item.length.toString()}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

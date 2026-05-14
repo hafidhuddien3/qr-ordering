@@ -18,7 +18,7 @@ export const utilsConfirm = ({
       style: "cancel",
     },
     {
-      text: "Delete",
+      text: isDestructiveStyle ? "Delete" : "Confirm",
       style: isDestructiveStyle ? "destructive" : "default",
       onPress: onConfirm,
     },

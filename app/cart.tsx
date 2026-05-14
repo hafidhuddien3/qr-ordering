@@ -10,6 +10,7 @@ import { router, Stack } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, Text, TextInput, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CartScreen() {
   const { t } = useTranslation();
@@ -61,7 +62,7 @@ export default function CartScreen() {
     cart.customer_note = note;
     utilsConfirm({
       message: t("order_now_confirm"),
-      isDestructiveStyle: true,
+      isDestructiveStyle: false,
       onConfirm: () => {
         setOrderLoading(true);
         api
@@ -85,7 +86,7 @@ export default function CartScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: choosedTheme.background }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: choosedTheme.background }}>
       <Stack.Screen options={{ title: t("cart_table_id")+" " + cart.table_id }} />
 
       <ScrollView>
@@ -240,6 +241,6 @@ export default function CartScreen() {
         </View>
         <IonIconButton text={t("order")} onPress={onOrder} loading={orderLoading} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

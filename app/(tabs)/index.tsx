@@ -20,7 +20,7 @@ export default function HomeScreen() {
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: choosedTheme.primary }}
+      headerBackgroundColor={{ light: choosedTheme.primary, dark: choosedTheme.primary }}
       headerImage={
         <Ionicons name="restaurant" size={300} color={choosedTheme.secondary} />
       }

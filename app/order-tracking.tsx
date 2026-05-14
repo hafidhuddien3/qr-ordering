@@ -18,7 +18,7 @@ import { APIOrderData } from "@/src/models/ordersFromAPI";
 import { ResponseBase } from "@/src/models/responseBase";
 import { calculateTotal } from "@/src/utils/cart";
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { Link, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -58,8 +58,6 @@ export default function OrderTrackingScreen() {
 
   const isLoadingOrderStatus = orderQueries.some((query) => query.isLoading);
 
-  
-
   useEffect(() => {
     const interval = setInterval(() => {
       setNow(Date.now());
@@ -79,7 +77,7 @@ export default function OrderTrackingScreen() {
 
   const totalPrice = useMemo(() => {
     if (!orders[0]?.data?.cart) return 0;
-    return calculateTotal(orders[0]?.data?.cart)
+    return calculateTotal(orders[0]?.data?.cart);
   }, [orders?.[0]?.data?.cart]);
 
   useEffect(() => {
@@ -137,9 +135,11 @@ export default function OrderTrackingScreen() {
               marginTop: 20,
             }}
           >
-            <Link href="/">
-              <IonIconButton iconName="home" text={t("back_to_home")} />
-            </Link>
+            <IonIconButton
+              iconName="home"
+              text={t("back_to_home")}
+              onPress={() => router.replace("/")}
+            />
           </View>
         </ThemedView>
       </ParallaxScrollView>
@@ -175,11 +175,12 @@ export default function OrderTrackingScreen() {
           flex: 1,
           paddingTop: 10,
           paddingHorizontal: 10,
+          paddingBottom: 50,
         }}
       >
         <ThemedView style={styles.titleContainer}></ThemedView>
         <ThemedText type="defaultSemiBold" style={{ textAlign: "center" }}>
-          {t("order_id")+`: ${orderIds.join(", ")}`}
+          {t("order_id") + `: ${orderIds.join(", ")}`}
         </ThemedText>
 
         <ScrollView>
@@ -257,7 +258,9 @@ export default function OrderTrackingScreen() {
                             justifyContent: "space-evenly",
                           }}
                         >
-                          <Text style={{ fontSize: 16 }}>{item.quantity} pcs</Text>
+                          <Text style={{ fontSize: 16 }}>
+                            {item.quantity} pcs
+                          </Text>
                         </View>
                       </View>
                     </View>
@@ -321,9 +324,11 @@ export default function OrderTrackingScreen() {
         <View
           style={{ padding: 5, justifyContent: "center", alignItems: "center" }}
         >
-          <Link href="/">
-            <IonIconButton iconName="home" text={t("back_to_home")} />
-          </Link>
+          <IonIconButton
+            iconName="home"
+            text={t("back_to_home")}
+            onPress={() => router.replace("/")}
+          />
         </View>
       </ThemedView>
     </ParallaxScrollView>
