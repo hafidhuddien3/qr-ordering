@@ -49,7 +49,7 @@ export default function CustomizeScreen() {
       name: item.name,
       total_price: totalPrice,
     });
-
+    cacheObject.shouldAnimateCart = true
     router.back();
   };
 

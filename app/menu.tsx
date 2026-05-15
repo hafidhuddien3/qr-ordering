@@ -9,10 +9,30 @@ import { MenuResponse } from "@/src/models/menuResponse";
 import { useCartStore } from "@/src/state/stores/useCartStore";
 import { useCategoryStore } from "@/src/state/stores/useCategoryStore";
 import { useQuery } from "@tanstack/react-query";
-import { router, Stack, useLocalSearchParams } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import {
+  router,
+  Stack,
+  useFocusEffect,
+  useLocalSearchParams,
+} from "expo-router";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, Text, TextInput, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSequence,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MenuScreen() {
@@ -21,6 +41,7 @@ export default function MenuScreen() {
     MenuResponse["categories"]
   >([]);
   const [search, setSearch] = useState("");
+  const [total, setTotal] = useState(0);
 
   const { tableId } = useLocalSearchParams();
   const { isOffline } = useNetworkStatus();
@@ -54,6 +75,11 @@ export default function MenuScreen() {
     }, 0);
   }, [cart]);
 
+  useEffect(() => {
+    setTotal(cart.item.length);
+    cacheObject.cartItemLength = cart.item.length;
+  }, [cart]);
+
   const filteredMenu = menuByCategory.map((category) => ({
     ...category,
     items: category?.items?.filter((item) =>
@@ -74,6 +100,76 @@ export default function MenuScreen() {
       setTableId(data?.data?.restaurant.table_id || "");
     }
   }, [data]);
+
+  //animation
+  const scale = useSharedValue(0);
+  const translateY = useSharedValue(-500);
+  const waterScale = useSharedValue(1);
+  const opacity = useSharedValue(1);
+
+  const waterDrop = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateY.value }, { scale: scale.value }],
+      opacity: opacity.value,
+    };
+  });
+
+  const water = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: waterScale.value }],
+    };
+  });
+
+  const config = {
+    duration: 1,
+  };
+
+  const startAnimation = () => {
+    if (cacheObject.cartItemLength != cart.item.length) {
+      setTotal(cart.item.length - 1);
+      setTimeout(() => {
+        setTotal(cart.item.length);
+      }, 2000);
+    }
+
+    // STEP 1 — scale down
+    scale.value = withSequence(
+      withTiming(10, config),
+      withDelay(20, withTiming(1, { duration: 500 })),
+      withDelay(1500, withTiming(0, { duration: 1 }))
+    );
+
+    // STEP 2 — move after scale
+    translateY.value = withSequence(
+      withDelay(1000, withTiming(-40, { duration: 500 })),
+      withDelay(500, withTiming(-500, { duration: 1 }))
+    );
+
+    opacity.value = withSequence(
+      withDelay(1500, withTiming(0, { duration: 500 })),
+      withDelay(500, withTiming(1, { duration: 1 }))
+    );
+
+    // STEP 3 — vibration/wobble after moving
+    waterScale.value = withDelay(
+      1500,
+      withSequence(
+        withTiming(1.6, { duration: 100 }),
+        withTiming(1.2, { duration: 100 }),
+        withTiming(1.3, { duration: 50 }),
+        withSpring(1)
+      )
+    );
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (cacheObject.shouldAnimateCart) {
+        startAnimation();
+        cacheObject.shouldAnimateCart = false;
+      }
+    }, [cacheObject.shouldAnimateCart])
+  );
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: choosedTheme.background }}>
@@ -158,13 +254,20 @@ export default function MenuScreen() {
         ))}
       </ScrollView>
       {isOffline && <OfflineIndicator />}
-      <View
-        style={{
-          flexDirection: "row",
-          padding: 10,
-          backgroundColor: choosedTheme.secondary,
-          paddingRight: 25,
-        }}
+      <Pressable
+      >
+        <Animated.View style={[styles.box, waterDrop]} />
+      </Pressable>
+      <Animated.View
+        style={[
+          {
+            flexDirection: "row",
+            padding: 10,
+            backgroundColor: choosedTheme.secondary,
+            paddingRight: 25,
+          },
+          water,
+        ]}
       >
         <View
           style={{
@@ -181,9 +284,33 @@ export default function MenuScreen() {
           accessibilityLabel="Go to cart"
           iconName={"cart"}
           onPress={() => router.push("/cart")}
-          text={cart.item.length.toString()}
+          text={total.toString()}
         />
-      </View>
+      </Animated.View>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "column",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-end",
+    backgroundColor: "lightblue",
+  },
+  box: {
+    position: "absolute",
+    width: 100,
+    height: 100,
+    backgroundColor: choosedTheme.secondary,
+    borderRadius: 500,
+
+    top: "50%",
+    left: "36%",
+  },
+  water: {
+    width: "100%",
+    height: 100,
+  },
+});
