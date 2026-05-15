@@ -33,5 +33,8 @@
   "start_qr_scan": "开始扫描二维码",
   "cart": "购物车",
   "menu": "菜单",
-  "add_item": "添加商品"
+  "add_item": "添加商品",
+  "offline_order_saved": "您已离线。订单已保存，网络恢复后将自动提交。",
+  "pending_orders": "待处理订单",
+  "cancel_pending_orders": "取消待处理订单"
 }

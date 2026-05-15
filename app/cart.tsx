@@ -1,9 +1,12 @@
 import { api } from "@/src/api/apiMiddleware";
 import IonIconButton from "@/src/components/button/ion-icon-button";
+import { OfflineIndicator } from "@/src/components/offline-indicator";
 import { choosedTheme } from "@/src/constants/theme";
+import { useNetworkStatus } from "@/src/hooks/useNetworkStatus";
 import { CartCategory } from "@/src/models/cart";
 import { useCartStore } from "@/src/state/stores/useCartStore";
 import { useCategoryStore } from "@/src/state/stores/useCategoryStore";
+import { useOrderQueue } from "@/src/state/stores/useOrderQueue";
 import { calculateTotal } from "@/src/utils/cart";
 import { utilsConfirm } from "@/src/utils/confirm";
 import { router, Stack } from "expo-router";
@@ -23,9 +26,11 @@ export default function CartScreen() {
   const removeItem = useCartStore((state) => state.removeItem);
   const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
   const clearCart = useCartStore((state) => state.clearCart);
+  const addOrder = useOrderQueue((state) => state.addOrder);
+  const { isOffline } = useNetworkStatus();
 
   const totalPrice = useMemo(() => {
-    return calculateTotal(cart)
+    return calculateTotal(cart);
   }, [cart]);
 
   useEffect(() => {
@@ -65,19 +70,31 @@ export default function CartScreen() {
       isDestructiveStyle: false,
       onConfirm: () => {
         setOrderLoading(true);
+        if (isOffline) {
+          setOrderLoading(false);
+          addOrder({
+            id: "temp-" + Date.now(),
+            orderData: cart,
+            status: "PENDING_SYNC",
+          });
+          clearCart();
+          router.replace(`/order-tracking?tableId=${cart.table_id}`);
+          return;
+        }
         api
           .postOrder(cart)
           .then((res: any) => {
-             setOrderLoading(false);
+            setOrderLoading(false);
             if (res?.data?.id) {
               clearCart();
               router.replace(`/order-tracking?tableId=${cart.table_id}`);
             }
           })
           .catch((err) => {
-             setOrderLoading(false);
+            setOrderLoading(false);
             alert(
-              t("place_order_failed")+"\nError: " +
+              t("place_order_failed") +
+                "\nError: " +
                 (err?.message || "Unknown error")
             );
           });
@@ -87,7 +104,9 @@ export default function CartScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: choosedTheme.background }}>
-      <Stack.Screen options={{ title: t("cart_table_id")+" " + cart.table_id }} />
+      <Stack.Screen
+        options={{ title: t("cart_table_id") + " " + cart.table_id }}
+      />
 
       <ScrollView>
         {menuByCategory.map((category) => {
@@ -142,7 +161,7 @@ export default function CartScreen() {
                         ).toFixed(2)}
                       </Text>
                     </View>
-                    <View style={{  paddingTop: 10, gap: 10, width: '50%' }}>
+                    <View style={{ paddingTop: 10, gap: 10, width: "50%" }}>
                       <View
                         style={{
                           flex: 1,
@@ -166,22 +185,18 @@ export default function CartScreen() {
                         <IonIconButton
                           iconName={"remove"}
                           onPress={() =>
-                            handleQuantityChange(
-                              item.id,
-                              item.quantity - 1
-                            )
+                            handleQuantityChange(item.id, item.quantity - 1)
                           }
                           padding={3}
                         />
-                        <Text style={{ fontSize: 16 }}>{item.quantity} pcs</Text>
+                        <Text style={{ fontSize: 16 }}>
+                          {item.quantity} pcs
+                        </Text>
                         <IonIconButton
                           iconName={"add"}
                           testID="add-button"
                           onPress={() =>
-                            handleQuantityChange(
-                              item.id,
-                              item.quantity + 1
-                            )
+                            handleQuantityChange(item.id, item.quantity + 1)
                           }
                           padding={3}
                         />
@@ -220,6 +235,7 @@ export default function CartScreen() {
           }}
         />
       </ScrollView>
+      {isOffline && <OfflineIndicator />}
       <View
         style={{
           flexDirection: "row",
@@ -239,7 +255,11 @@ export default function CartScreen() {
             {t("total")} USD {totalPrice.toFixed(2)}
           </Text>
         </View>
-        <IonIconButton text={t("order")} onPress={onOrder} loading={orderLoading} />
+        <IonIconButton
+          text={t("order")}
+          onPress={onOrder}
+          loading={orderLoading}
+        />
       </View>
     </SafeAreaView>
   );

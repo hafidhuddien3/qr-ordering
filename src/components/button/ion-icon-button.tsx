@@ -18,6 +18,7 @@ export default function IonIconButton({ onPress, iconName, text, padding, loadin
       style={{
         flexDirection: "row",
         alignItems: "center",
+        justifyContent: "center",
         backgroundColor: choosedTheme.primary,
         padding: padding || 10,
         borderRadius: 10,
@@ -28,7 +29,7 @@ export default function IonIconButton({ onPress, iconName, text, padding, loadin
       testID={testID}
     >
       {iconName && <Ionicons name={iconName} size={24} color="white" />}
-      {text && <Text style={{ color: "white", marginLeft: 0, fontWeight:'500' }}>{text}</Text>}
+      {text && <Text style={{ color: "white", fontWeight:'500', textAlign:'center' }}>{text}</Text>}
       {loading && <ActivityIndicator />}
     </TouchableOpacity>
   );

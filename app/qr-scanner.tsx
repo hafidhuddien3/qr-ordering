@@ -1,5 +1,6 @@
 import { api } from "@/src/api/apiMiddleware";
 import { ThemedText } from "@/src/components/themed-text";
+import { useCartStore } from "@/src/state/stores/useCartStore";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { Link, router } from "expo-router";
 import { useState } from "react";
@@ -10,6 +11,7 @@ export default function QRScanner() {
   const { t } = useTranslation();
   const [permission, requestPermission] = useCameraPermissions();
   const [scannedSuccess, setScannedSuccess] = useState(false);
+  const cart = useCartStore((state) => state.order);
 
   if (!permission) {
     return <View />;
@@ -46,6 +48,8 @@ export default function QRScanner() {
                   ? (tableId = data.split("ipot://table/")[1])
                   : invalidQR();
 
+                if (tableId==cart.table_id) return router.replace(`/menu?tableId=${tableId}`);
+
                 tableId &&
                   api
                     .getMenuForATable(tableId)
@@ -54,13 +58,17 @@ export default function QRScanner() {
                         setScannedSuccess(true);
                         router.replace(`/menu?tableId=${tableId}`);
                       } else {
-                        setScannedSuccess(false);
                         alert(response?.message);
+                        setTimeout(() => {
+                          setScannedSuccess(false);
+                        }, 3000);
                       }
                     })
                     .catch((error) => {
-                      setScannedSuccess(false);
                       alert("Error: " + error?.message);
+                      setTimeout(() => {
+                        setScannedSuccess(false);
+                      }, 3000);
                     });
               }
         }

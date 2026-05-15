@@ -2,7 +2,9 @@ import { api } from "@/src/api/apiMiddleware";
 import { cacheObject } from "@/src/cache/cache";
 import AddButton from "@/src/components/button/add-menu-button";
 import IonIconButton from "@/src/components/button/ion-icon-button";
+import { OfflineIndicator } from "@/src/components/offline-indicator";
 import { choosedTheme } from "@/src/constants/theme";
+import { useNetworkStatus } from "@/src/hooks/useNetworkStatus";
 import { MenuResponse } from "@/src/models/menuResponse";
 import { useCartStore } from "@/src/state/stores/useCartStore";
 import { useCategoryStore } from "@/src/state/stores/useCategoryStore";
@@ -21,6 +23,7 @@ export default function MenuScreen() {
   const [search, setSearch] = useState("");
 
   const { tableId } = useLocalSearchParams();
+  const { isOffline } = useNetworkStatus();
 
   const { data, isLoading } = useQuery({
     queryKey: ["menu", tableId],
@@ -28,6 +31,13 @@ export default function MenuScreen() {
     staleTime: 1000 * 60 * 60 * 6, // 6 hours
     gcTime: 1000 * 60 * 60 * 24 * 2, // 2 day
     enabled: !!tableId,
+  });
+
+  const { data: dataCategories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => api.getListMenuCategories(),
+    staleTime: 1000 * 60 * 60 * 6, // 6 hours
+    gcTime: 1000 * 60 * 60 * 24 * 2, // 2 day
   });
 
   const cart = useCartStore((state) => state.order);
@@ -68,7 +78,7 @@ export default function MenuScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: choosedTheme.background }}>
       <Stack.Screen
-        options={{ title: t("menu_at")+" " + data?.data?.restaurant.name }}
+        options={{ title: t("menu_at") + " " + data?.data?.restaurant.name }}
       />
       <Text
         style={{
@@ -146,6 +156,7 @@ export default function MenuScreen() {
           </View>
         ))}
       </ScrollView>
+      {isOffline && <OfflineIndicator />}
       <View
         style={{
           flexDirection: "row",

@@ -31,7 +31,7 @@ export const apiService = {
   },
 
   // POST	/api/v1/orders	Create new order
-  async postOrder(dataPost: OrderData) {
+  async postOrder(dataPost: OrderData): Promise<ResponseBase<{ id: string }>> {
     return await request({
       method: "POST",
       url: "/orders",

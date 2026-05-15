@@ -12,7 +12,7 @@
   "remove_item_confirm": "Remove this item from cart?",
   "cart_empty": "Your cart is empty",
   "order_now_confirm": "Place order now?",
-  "place_order_failed": "Failed to place order. Please try again.",
+  "place_order_failed": "Failed to place order. \nPlease try again.",
   "cart_table_id": "Cart for Table ID",
   "customer_note": "Customer Note",
   "customer_note_placeholder": "Add a note...",
@@ -33,5 +33,8 @@
   "start_qr_scan": "Start QR Scan",
   "cart": "Cart",
   "menu": "Menu",
-  "add_item": "Add Item"
+  "add_item": "Add Item",
+  "offline_order_saved":"You’re offline. Order saved and will be sent when connection returns.",
+  "pending_orders": "Pending Orders",
+  "cancel_pending_orders": "Cancel Pending Orders"
 }

@@ -1,5 +1,8 @@
 import { CartData, CartMenuItem } from "@/src/models/cart";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from "react-native";
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 type CartStore = {
   order: CartData;
@@ -23,7 +26,7 @@ const initialOrder: CartData = {
 };
 
 export const useCartStore = create<CartStore>()(
-  // persist(
+  persist(
   (set) => ({
     order: initialOrder,
 
@@ -115,11 +118,11 @@ export const useCartStore = create<CartStore>()(
         },
       })),
   })
-  //   {
-  //     name: "cart-storage",
-  //     storage: createJSONStorage(() =>
-  //       Platform.OS === "web" ? localStorage : AsyncStorage
-  //     ),
-  //   }
-  // )
+    ,{
+      name: "cart-storage",
+      storage: createJSONStorage(() =>
+        Platform.OS === "web" ? localStorage : AsyncStorage
+      ),
+    }
+  )
 );
