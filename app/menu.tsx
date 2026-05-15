@@ -141,6 +141,7 @@ export default function MenuScreen() {
                   <Text>USD {item.price}</Text>
                 </View>
                 <AddButton
+                  accessibilityLabel="Add item to cart"
                   onPress={() => {
                     cacheObject.currentMenuItem = item;
                     router.push({
@@ -177,6 +178,7 @@ export default function MenuScreen() {
           </Text>
         </View>
         <IonIconButton
+          accessibilityLabel="Go to cart"
           iconName={"cart"}
           onPress={() => router.push("/cart")}
           text={cart.item.length.toString()}

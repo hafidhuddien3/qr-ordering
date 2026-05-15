@@ -92,6 +92,7 @@ export default function OrderStatusStepper({ currentStatus }: Props) {
 
   return (
     <View
+      accessibilityLabel="Order status stepper"
       style={{
         padding: 20,
         backgroundColor: "#111827",

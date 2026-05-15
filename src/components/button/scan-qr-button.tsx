@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next";
 import { Text, TouchableOpacity } from "react-native";
 
 type Props = {
-  children?: React.ReactNode;
   onPress?: () => void;
+  accessibilityLabel: string;
 };
 
-export default function ScanButton({ children, onPress }: Props) {
+export default function ScanButton({ onPress, accessibilityLabel }: Props) {
   const { t } = useTranslation();
   return (
     <TouchableOpacity
@@ -20,6 +20,7 @@ export default function ScanButton({ children, onPress }: Props) {
         borderRadius: 8,
       }}
       onPress={onPress}
+      accessibilityLabel= {accessibilityLabel}
     >
 
       <Ionicons name="qr-code-outline" size={24} color="white" />

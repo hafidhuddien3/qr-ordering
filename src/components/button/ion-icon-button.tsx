@@ -10,9 +10,10 @@ type Props = {
   padding?: number;
   loading?: boolean;
   testID?: string;
+  accessibilityLabel: string;
 };
 
-export default function IonIconButton({ onPress, iconName, text, padding, loading, testID }: Props) {
+export default function IonIconButton({ onPress, iconName, text, padding, loading, testID, accessibilityLabel }: Props) {
   return (
     <TouchableOpacity
       style={{
@@ -27,6 +28,7 @@ export default function IonIconButton({ onPress, iconName, text, padding, loadin
       disabled={loading}
       onPress={onPress}
       testID={testID}
+      accessibilityLabel= {accessibilityLabel}
     >
       {iconName && <Ionicons name={iconName} size={24} color="white" />}
       {text && <Text style={{ color: "white", fontWeight:'500', textAlign:'center' }}>{text}</Text>}

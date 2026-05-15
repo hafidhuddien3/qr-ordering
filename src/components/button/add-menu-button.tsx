@@ -5,9 +5,10 @@ import { TouchableOpacity } from "react-native";
 
 type Props = {
   onPress?: () => void;
+  accessibilityLabel: string;
 };
 
-export default function AddButton({ onPress }: Props) {
+export default function AddButton({ onPress, accessibilityLabel }: Props) {
   return (
     <TouchableOpacity
       style={{
@@ -18,6 +19,7 @@ export default function AddButton({ onPress }: Props) {
         borderRadius: 10,
       }}
       onPress={onPress}
+      accessibilityLabel={accessibilityLabel}
     >
       <Ionicons name="add" size={24} color="white" />
     </TouchableOpacity>

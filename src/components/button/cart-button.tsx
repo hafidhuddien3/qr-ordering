@@ -5,9 +5,10 @@ import { TouchableOpacity } from "react-native";
 
 type Props = {
   onPress?: () => void;
+  accessibilityLabel: string;
 };
 
-export default function CartButton({ onPress }: Props) {
+export default function CartButton({ onPress, accessibilityLabel }: Props) {
   return (
     <TouchableOpacity
       style={{
@@ -18,6 +19,7 @@ export default function CartButton({ onPress }: Props) {
         borderRadius: 10,
       }}
       onPress={onPress}
+      accessibilityLabel= {accessibilityLabel}
     >
       <Ionicons name="cart" size={24} color="white" />
     </TouchableOpacity>

@@ -311,6 +311,7 @@ export default function OrderTrackingScreen() {
             </View>
           </View>
           <IonIconButton
+            accessibilityLabel={t("cancel_pending_orders")}
             text={t("cancel_pending_orders")}
             onPress={() => {
               utilsConfirm({
@@ -377,6 +378,7 @@ export default function OrderTrackingScreen() {
             }}
           >
             <IonIconButton
+              accessibilityLabel={t("back_to_home")}
               iconName="home"
               text={t("back_to_home")}
               onPress={() => router.replace("/")}
@@ -578,6 +580,7 @@ export default function OrderTrackingScreen() {
           }}
         >
           <IonIconButton
+            accessibilityLabel={t("back_to_home")}
             iconName="home"
             text={t("back_to_home")}
             onPress={() => router.replace("/")}

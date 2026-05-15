@@ -183,6 +183,7 @@ export default function CartScreen() {
                         }}
                       >
                         <IonIconButton
+                          accessibilityLabel={"decrease_quantity"}
                           iconName={"remove"}
                           onPress={() =>
                             handleQuantityChange(item.id, item.quantity - 1)
@@ -193,6 +194,7 @@ export default function CartScreen() {
                           {item.quantity} pcs
                         </Text>
                         <IonIconButton
+                          accessibilityLabel={"increase_quantity"}
                           iconName={"add"}
                           testID="add-button"
                           onPress={() =>
@@ -222,6 +224,7 @@ export default function CartScreen() {
           {t("customer_note")}
         </Text>
         <TextInput
+          accessibilityLabel={t("customer_note_placeholder")}
           placeholder={t("customer_note_placeholder")}
           placeholderTextColor={"gray"}
           value={note}
@@ -256,6 +259,7 @@ export default function CartScreen() {
           </Text>
         </View>
         <IonIconButton
+          accessibilityLabel={t("order")}
           text={t("order")}
           onPress={onOrder}
           loading={orderLoading}

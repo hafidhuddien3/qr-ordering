@@ -20,7 +20,10 @@ export default function HomeScreen() {
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: choosedTheme.primary, dark: choosedTheme.primary }}
+      headerBackgroundColor={{
+        light: choosedTheme.primary,
+        dark: choosedTheme.primary,
+      }}
       headerImage={
         <Ionicons name="restaurant" size={300} color={choosedTheme.secondary} />
       }
@@ -30,9 +33,7 @@ export default function HomeScreen() {
           <ThemedText type="title">{t("welcome_title")}</ThemedText>
           <HelloWave />
         </ThemedView>
-        <ThemedText>
-          {t("welcome_description")}
-        </ThemedText>
+        <ThemedText>{t("welcome_description")}</ThemedText>
         <ThemedView style={styles.stepContainer}>
           <View
             style={{
@@ -41,20 +42,25 @@ export default function HomeScreen() {
               maxWidth: 200,
             }}
           >
-              <ScanButton onPress={()=>router.push("/qr-scanner")} />
+            <ScanButton
+              accessibilityLabel={t("start_qr_scan")}
+              onPress={() => router.push("/qr-scanner")}
+            />
             {/* developer testing button, please ignore: */}
             {isDevMode ? (
               <IonIconButton
+                accessibilityLabel={"Developer menu"}
                 iconName="construct-outline"
                 text="menu?tableId=T001"
                 onPress={() => {
                   router.push("/menu?tableId=T001");
                 }}
               />
-            ): null}
+            ) : null}
             {cart.table_id ? (
               <>
                 <IonIconButton
+                  accessibilityLabel={t("last_scanned_table")}
                   iconName="time-outline"
                   text={t("last_scanned_table")}
                   onPress={() => {
@@ -62,6 +68,7 @@ export default function HomeScreen() {
                   }}
                 />
                 <IonIconButton
+                  accessibilityLabel={t("order_tracking")}
                   iconName="fast-food-outline"
                   text={t("order_tracking")}
                   onPress={() => {
@@ -69,7 +76,7 @@ export default function HomeScreen() {
                   }}
                 />
               </>
-            ): null}
+            ) : null}
           </View>
         </ThemedView>
       </View>

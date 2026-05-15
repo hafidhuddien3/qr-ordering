@@ -169,13 +169,13 @@ export default function CustomizeScreen() {
 
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
           <Pressable onPress={() => setQuantity((q) => Math.max(1, q - 1))}>
-            <Ionicons name="remove-circle" size={28} color="#C62828" />
+            <Ionicons name="remove-circle" size={30} color="#C62828" />
           </Pressable>
 
           <Text style={{ fontSize: 18 }}>{quantity}</Text>
 
           <Pressable onPress={() => setQuantity((q) => q + 1)}>
-            <Ionicons name="add-circle" size={28} color="#2E7D32" />
+            <Ionicons name="add-circle" size={30} color="#2E7D32" />
           </Pressable>
         </View>
       </View>
