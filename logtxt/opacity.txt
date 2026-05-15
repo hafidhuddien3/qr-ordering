@@ -1,0 +1,12 @@
+| Alpha hex | Opacity | Meaning           |
+| --------- | ------- | ----------------- |
+| `00`      | 0%      | fully transparent |
+| `05`      | ~2%     | almost invisible  |
+| `10`      | ~6%     | very transparent  |
+| `20`      | ~12%    |                   |
+| `30`      | ~19%    |                   |
+| `40`      | ~25%    |                   |
+| `50`      | ~31%    |                   |
+| `80`      | ~50%    |                   |
+| `CC`      | ~80%    |                   |
+| `FF`      | 100%    | fully opaque      |

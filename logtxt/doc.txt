@@ -1,0 +1,73 @@
+https://www.notion.so/IPOT-Mobile-Developer-Technical-Test-35870d20b87980729abaefcc0f4d01ca
+
+ scan QR → browse menu → add items to cart → submit order → track status
+
+ ### 1. QR Code Scanner
+
+- Open camera and scan a QR code containing a table ID (format: `ipot://table/{tableId}`)
+- Handle invalid QR codes gracefully
+- After scanning, navigate to the menu for that table's restaurant
+
+### 2. Menu Browser
+
+- Fetch menu from API: `GET /api/v1/menu?table_id={tableId}`
+- Display menu categories as tabs/sections
+- Show menu items with: name, description, price, image (if available)
+- Support searching/filtering menu items
+
+### 3. Cart & Customizations
+
+- Add items to cart with quantity controls (+/-)
+- Support item customizations (e.g., "No onion", "Extra spicy", "Medium rare")
+    - Each customization may have a price modifier
+- Show cart summary with item count, subtotal, and customization details
+- Allow removing items or adjusting quantities
+
+### 4. Order Submission
+
+### 5. Order Tracking (Bonus)
+
+screens:
+QR Code Scanner
+Menu Browser
+Customizations (modal/screen)
+Cart
+Order Tracking
+
+1. **Project Structure** — Clean, scalable folder organization v
+2. **State Management** — How you manage cart, menu, and order state v
+3. **Type Safety** — Use TypeScript (React Native) or Dart (Flutter) v
+4. **Error Handling** — Network failures, invalid inputs, edge cases
+5. **Performance** — Smooth scrolling, efficient re-renders v
+6. **Accessibility** — Basic a11y considerations (labels, contrast)
+7. **Testing** — At least 2-3 unit/widget tests
+8. **Git History** — Meaningful commits (not one giant commit) v
+
+Functionality	25%	All core features work. Handles edge cases.
+Code Quality	25%	Clean, readable, well-organized. Meaningful naming.
+Architecture	20%	Scalable structure. Separation of concerns. State management.
+Error Handling	15%	Graceful failures. Loading states. User-friendly messages.
+Testing	10%	Unit/widget tests for key logic (cart calculations, state).
+Polish	5%	Animations, transitions, visual consistency.
+
+- All 4 core features (QR → Menu → Cart → Order) working v
+- TypeScript or Dart with proper types v
+- At least 2 meaningful tests v
+- Clean git history v
+
+- [ ]  **Offline Support** — Cache menu data locally, queue orders when offline
+- [ ]  **Real-time Updates** — WebSocket or polling for order status v
+- [ ]  **Accessibility** — Screen reader support, dynamic font sizing
+- [ ]  **CI/CD** — GitHub Actions for lint + test on PR
+- [ ]  **E2E Test** — One Detox or integration test
+- [ ]  **Animation** — Smooth cart add animation or pull-to-refresh
+- [ ]  **i18n** — Support for Chinese + English
+
+later:
+- [ ]  GitHub repo with clear README v
+- [ ]  Setup instructions (how to run the app) v
+- [ ]  `.env` or config for API base URL v
+- [ ]  Working build (APK, iOS build, or Expo Snack link)
+- [ ]  Brief architecture explanation in README v
+- [ ]  2+ tests passing v
+- [ ]  Clean commit history v

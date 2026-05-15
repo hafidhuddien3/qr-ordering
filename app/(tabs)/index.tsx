@@ -1,87 +1,93 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet, View } from "react-native";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import IonIconButton from "@/src/components/button/ion-icon-button";
+import ScanButton from "@/src/components/button/scan-qr-button";
+import { HelloWave } from "@/src/components/hello-wave";
+import ParallaxScrollView from "@/src/components/parallax-scroll-view";
+import { ThemedText } from "@/src/components/themed-text";
+import { ThemedView } from "@/src/components/themed-view";
+import { choosedTheme } from "@/src/constants/theme";
+import { useCartStore } from "@/src/state/stores/useCartStore";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
+
+const isDevMode = false;
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
+  const cart = useCartStore((state) => state.order);
+
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{
+        light: choosedTheme.primary,
+        dark: choosedTheme.primary,
+      }}
       headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
+        <Ionicons name="restaurant" size={300} color={choosedTheme.secondary} />
+      }
+    >
+      <View style={{ flex: 1, padding: 32, gap: 16, overflow: "hidden" }}>
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type="title">{t("welcome_title")}</ThemedText>
+          <HelloWave />
+        </ThemedView>
+        <ThemedText>{t("welcome_description")}</ThemedText>
+        <ThemedView style={styles.stepContainer}>
+          <View
+            style={{
+              padding: 5,
+              gap: 10,
+              maxWidth: 200,
+            }}
+          >
+            <ScanButton
+              accessibilityLabel={t("start_qr_scan")}
+              onPress={() => router.push("/qr-scanner")}
             />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
+            {/* developer testing button, please ignore: */}
+            {isDevMode ? (
+              <IonIconButton
+                accessibilityLabel={"Developer menu"}
+                iconName="construct-outline"
+                text="menu?tableId=T001"
+                onPress={() => {
+                  router.push("/menu?tableId=T001");
+                }}
               />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
-
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
+            ) : null}
+            {cart.table_id ? (
+              <>
+                <IonIconButton
+                  accessibilityLabel={t("last_scanned_table")}
+                  iconName="time-outline"
+                  text={t("last_scanned_table")}
+                  onPress={() => {
+                    router.push(`/menu?tableId=${cart.table_id}`);
+                  }}
+                />
+                <IonIconButton
+                  accessibilityLabel={t("order_tracking")}
+                  iconName="fast-food-outline"
+                  text={t("order_tracking")}
+                  onPress={() => {
+                    router.push(`/order-tracking?tableId=${cart.table_id}`);
+                  }}
+                />
+              </>
+            ) : null}
+          </View>
+        </ThemedView>
+      </View>
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   stepContainer: {
@@ -93,6 +99,7 @@ const styles = StyleSheet.create({
     width: 290,
     bottom: 0,
     left: 0,
-    position: 'absolute',
+    position: "absolute",
+    color: choosedTheme.secondary,
   },
 });
