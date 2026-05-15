@@ -132,10 +132,10 @@ export default function CartScreen() {
                       justifyContent: "space-between",
                       marginRight: 10,
                     }}
-                    key={item.menu_item_id}
+                    key={item.id}
                   >
                     <View
-                      key={item.menu_item_id}
+                      key={item.id}
                       style={{
                         padding: 10,
                         borderBottomWidth: 1,
@@ -237,6 +237,15 @@ export default function CartScreen() {
             borderColor: choosedTheme.primary,
           }}
         />
+
+        <View style={{ padding:20 }} >
+          <IonIconButton
+          accessibilityLabel={"delete_cart"}
+          iconName="trash"
+          text={"Delete Cart"}
+          onPress={clearCart}
+        />
+        </View>
       </ScrollView>
       {isOffline && <OfflineIndicator />}
       <View
