@@ -64,6 +64,7 @@ export const useCartStore = create<CartStore>()(
                   ? {
                       ...item,
                       quantity: item.quantity + newItem.quantity,
+                      total_price: item.total_price + newItem.total_price
                     }
                   : item
               ),
