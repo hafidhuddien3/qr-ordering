@@ -237,14 +237,19 @@ export default function CartScreen() {
             borderColor: choosedTheme.primary,
           }}
         />
-
-        <View style={{ padding:20 }} >
+        <View style={{ padding: 20, width: "50%" }}>
           <IonIconButton
-          accessibilityLabel={"delete_cart"}
-          iconName="trash"
-          text={"Delete Cart"}
-          onPress={clearCart}
-        />
+            accessibilityLabel={"clear_cart"}
+            iconName="trash"
+            text={"Clear Cart"}
+            onPress={() =>
+              utilsConfirm({
+                message: "Clear Cart?",
+                isDestructiveStyle: true,
+                onConfirm: () => clearCart(),
+              })
+            }
+          />
         </View>
       </ScrollView>
       {isOffline && <OfflineIndicator />}
