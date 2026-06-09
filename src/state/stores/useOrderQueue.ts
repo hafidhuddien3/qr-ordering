@@ -1,7 +1,5 @@
 import { CartData } from "@/src/models/cart";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
 
 type Order = {
   id: string;
@@ -17,7 +15,7 @@ type OrderStore = {
 };
 
 export const useOrderQueue = create<OrderStore>()(
-  persist(
+  // persist(
     (set) => ({
       queue: [],
 
@@ -32,10 +30,11 @@ export const useOrderQueue = create<OrderStore>()(
         })),
 
       clear: () => set({ queue: [] }),
-    }),
-    {
-      name: "order-queue",
-      storage: createJSONStorage(() => AsyncStorage),
-    }
-  )
+    })
+  //   ,
+  //   {
+  //     name: "order-queue",
+  //     storage: createJSONStorage(() => AsyncStorage),
+  //   }
+  // )
 );
