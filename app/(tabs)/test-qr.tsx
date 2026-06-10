@@ -43,7 +43,8 @@ export default function TabTwoScreen() {
 
 const styles = StyleSheet.create({
   image: {
-    width: "100%",
+    alignSelf: "center",
+    width: 300,
     height: 300,
     // flex: 1,
   },
