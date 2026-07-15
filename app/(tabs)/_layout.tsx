@@ -45,7 +45,16 @@ export default function TabLayout() {
         options={{
           title: "Test QR",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="gearshape.fill" color={color} />
+            <IconSymbol size={28} name="checklist" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="ai-assistant"
+        options={{
+          title: "AI Assistant",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="brain.head.profile" color={color} />
           ),
         }}
       />

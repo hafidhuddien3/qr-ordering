@@ -19,6 +19,24 @@ const MAPPING = {
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'gearshape.fill': 'settings',
+
+    // AI
+  'brain.head.profile': 'psychology',
+  'sparkles': 'auto-awesome',
+  'cpu': 'memory',
+
+    // Quiz / Test
+  'questionmark.circle.fill': 'quiz',
+  // Assignment / Exam
+  'doc.text.fill': 'assignment',
+  // Checklist / Test results
+  'checklist': 'fact-check',
+  // Verification
+  'checkmark.seal.fill': 'verified',
+  // Scientific test / Lab
+  'testtube.2': 'science',
+  // Bug testing / QA
+  'ladybug.fill': 'bug-report',
 } as IconMapping;
 
 /**
